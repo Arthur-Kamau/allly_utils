@@ -1,22 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:register/database/auth_data.dart';
 
 import 'package:register/pages/login_register/login.dart';
 import 'package:register/pages/login_register/register.dart';
 
 import 'package:register/pages/login_register/register_extra_info.dart';
 import 'package:register/pages/login_register/code_confirmation.dart';
-
+import 'package:register/utils/app_id.dart';
+import 'package:register/utils/random.dart';
 import 'package:register/pages/licence/licence.dart';
 import 'package:register/pages/slides/homePage.dart';
 import 'package:register/pages/loading/loading.dart';
 import 'package:register/pages/logout/logout.dart';
 import 'package:register/pages/chat/chat_history.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 void main() {
   runApp(AllyHomePage());
 }
 
-class AllyHomePage extends StatelessWidget {
+class AllyHomePage extends StatefulWidget {
+  @override
+  AllyHomePageState createState() {
+    return new AllyHomePageState();
+  }
+}
+
+class AllyHomePageState extends State<AllyHomePage> {
   final routes = <String, WidgetBuilder>{
 //intor slider
     IntroSliderHomePage.tag: (context) => IntroSliderHomePage(),
@@ -37,6 +48,42 @@ class AllyHomePage extends StatelessWidget {
     ConfirmCode.tag: (context) => ConfirmCode(),
   };
 
+  Future<AuthDetails> getAppToken() {
+    AppId().stateAppId();
+
+    Future<AuthDetails> auth = AuthData().getAuthDetails();
+    return auth;
+  }
+
+  Widget dataChoice(BuildContext context, AsyncSnapshot<AuthDetails> snapshot) {
+    var val = snapshot.data;
+    if (val != null || val.authtoken.length > 0) {
+      //show licence page
+      return AllyLicencePage();
+    } else {
+      //user has token
+      //show app main page
+      return ChatHistory();
+    }
+  }
+
+  Widget _showApropriateWidget() {
+    return new FutureBuilder<AuthDetails>(
+        future: getAppToken(),
+        //    initialData: "Loading text..",
+        builder: (BuildContext context, AsyncSnapshot<AuthDetails> data) {
+          if (data.hasData) {
+            return dataChoice(context, data);
+          } else if (data.hasError) {
+            return Text("errror ${data.error}");
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -46,7 +93,7 @@ class AllyHomePage extends StatelessWidget {
         primaryColor: Color(0xFF3D4878),
         scaffoldBackgroundColor: Colors.grey.shade200,
       ),
-      home: AllyLicencePage(),
+      home: _showApropriateWidget(),
       routes: routes,
     );
   }

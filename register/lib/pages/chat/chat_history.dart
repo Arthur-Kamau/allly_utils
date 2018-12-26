@@ -10,9 +10,17 @@ class _ChatHistoryState extends State<ChatHistory> {
   Widget build(BuildContext context) {
     return Container(
       child: Center(
-        child: RaisedButton(
-          child: Text("logout"),
-          onPressed: () {},
+        child: Column(
+          children: <Widget>[
+            RaisedButton(
+              child: Text("exit app"),
+              onPressed: () {},
+            ),
+            RaisedButton(
+              child: Text("logout"),
+              onPressed: () {},
+            ),
+          ],
         ),
       ),
     );

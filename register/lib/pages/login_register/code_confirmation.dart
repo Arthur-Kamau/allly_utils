@@ -1,7 +1,11 @@
+import 'package:register/database/auth_data.dart';
 import 'package:register/pages/login_register/register.dart';
 import 'package:register/pages/chat/chat_history.dart';
 import 'package:flutter/material.dart';
 import 'package:register/pages/chat/chat_history.dart';
+import 'package:register/utils/app_id.dart';
+import 'package:register/utils/phone_number.dart';
+import 'package:register/utils/random.dart';
 
 // import 'package:ally_native/pages/landing/landing.dart';
 
@@ -22,7 +26,10 @@ class _ConfirmCodePageState extends State<ConfirmCode> {
   Padding buildTitle() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Text('Code Confirmation', style: TextStyle(fontSize: 32.0,color: Colors.blue),),
+      child: Text(
+        'Code Confirmation',
+        style: TextStyle(fontSize: 32.0, color: Colors.blue),
+      ),
     );
   }
 
@@ -49,12 +56,9 @@ class _ConfirmCodePageState extends State<ConfirmCode> {
           return 'Please enter your code confirmation';
         }
       },
-      decoration: InputDecoration(
-        labelText: 'Code Confirmation'
-      ),
+      decoration: InputDecoration(labelText: 'Code Confirmation'),
     );
   }
-
 
   Align confirmCode(BuildContext context) {
     return Align(
@@ -67,16 +71,37 @@ class _ConfirmCodePageState extends State<ConfirmCode> {
               //Only gets here if the fields pass
               _formKey.currentState.save();
               //TODO Check values and navigate to new page
-          //     Navigator.of(context).pushNamed(UserPrivateProfilePage.tag);
-          Navigator.pushNamedAndRemoveUntil(context, ChatHistory.tag, (_) => false);
+
+              //auth confirmation code
+              //save app details
+              PhoneNumber().getPhoneNumber().then((phone_number) {
+                print("user phone number $phone_number");
+              });
+              //save appdetails
+              String getAppToken = AppRandom().randomString(20);
+              AppId().getAppId().then((appid) {
+                var auth = AuthDetails(
+                    authStatus: 1,
+                    authTime: DateTime.now(),
+                    authtoken: getAppToken,
+                    deviceId: appid);
+                var dbHelper = AuthData();
+                dbHelper.saveAuthDetails(auth);
+              });
+
+              //then naivigate to homepage
+
+              Navigator.pushNamedAndRemoveUntil(
+                  context, ChatHistory.tag, (_) => false);
             }
           },
-          color: Colors.blue,//grey[900],
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
-          child: Text('Confirm', style: Theme
-            .of(context)
-            .primaryTextTheme
-            .button,),
+          color: Colors.blue, //grey[900],
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+          child: Text(
+            'Confirm',
+            style: Theme.of(context).primaryTextTheme.button,
+          ),
         ),
       ),
     );
@@ -99,41 +124,40 @@ class _ConfirmCodePageState extends State<ConfirmCode> {
       height: 46.0,
       width: 46.0,
       decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        border: Border.all(color: Colors.grey, width: 0.5)
-      ),
+          shape: BoxShape.circle,
+          border: Border.all(color: Colors.grey, width: 0.5)),
     );
   }
 
   Align buildSignUpText() {
     return Align(
-      child: Row(
-              children: <Widget>[
-                 RichText(
+      child: Row(children: <Widget>[
+        RichText(
           text: TextSpan(
-            text: "Didn't get Confirmation Code",// 'You Don\'t have an account?',
-            style: TextStyle(fontSize: 12.0, color: Colors.blue),
-            children: <TextSpan>[
-               TextSpan(
-                text: '',
-                
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.0, color: Colors.black)
-               ),
-            ]
-          ),
+              text:
+                  "Didn't get Confirmation Code", // 'You Don\'t have an account?',
+              style: TextStyle(fontSize: 12.0, color: Colors.blue),
+              children: <TextSpan>[
+                TextSpan(
+                    text: '',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14.0,
+                        color: Colors.black)),
+              ]),
         ),
         FlatButton(
-          child: Text(
-                 ' RESEND',  
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.0, color: Colors.black)
-              ),
-              onPressed: (){
-                print("register");
-                 Navigator.of(context).pushNamed(RegisterPage.tag);
-              },
+          child: Text(' RESEND',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14.0,
+                  color: Colors.black)),
+          onPressed: () {
+            print("register");
+            Navigator.of(context).pushNamed(RegisterPage.tag);
+          },
         )
-     ]
-      ),
+      ]),
     );
   }
 
@@ -148,16 +172,26 @@ class _ConfirmCodePageState extends State<ConfirmCode> {
             SizedBox(height: kToolbarHeight),
             buildTitle(),
             buildTitleLine(),
-            SizedBox(height: 50.0,),
+            SizedBox(
+              height: 50.0,
+            ),
             buildEmailTextField(),
-            SizedBox(height: 30.0,),
+            SizedBox(
+              height: 30.0,
+            ),
             // buildPasswordInput(context),
-            
-            SizedBox(height: 50.0,),
+
+            SizedBox(
+              height: 50.0,
+            ),
             confirmCode(context),
-            SizedBox(height: 30.0,),
+            SizedBox(
+              height: 30.0,
+            ),
             // buildOrText(),
-            SizedBox(height: 16.0,),
+            SizedBox(
+              height: 16.0,
+            ),
             SizedBox(height: 40.0),
             buildSignUpText()
           ],
@@ -184,16 +218,16 @@ class _ConfirmCodePageState extends State<ConfirmCode> {
 //   child:   TextFormField(
 //     keyboardType: TextInputType.numberWithOptions(),
 //     autofocus: true,
-    
+
 //     decoration: InputDecoration(
 //       hintText: 'code',
-      
+
 //       //contentPadding: EdgeInsets.fromLTRB(5.0, 0.0, 5.0, 0.0),
 //       // border: OutlineInputBorder(
 //       //   borderRadius: BorderRadius.circular(0.0)
 //       // )
 //     ),
-    
+
 //   ),
 // );
 
@@ -211,7 +245,7 @@ class _ConfirmCodePageState extends State<ConfirmCode> {
 //   ),
 //     );
 
-//   var formContainer = 
+//   var formContainer =
 
 //             Column(
 //             crossAxisAlignment: CrossAxisAlignment.center,
@@ -224,13 +258,11 @@ class _ConfirmCodePageState extends State<ConfirmCode> {
 //             confirmCodeButton
 //           ],
 //         );
-   
-  
+
 //   var bodyContainer = new Scaffold(
 //     backgroundColor: Colors.white,
 //     body: formContainer ,
 //   );
-
 
 //     return bodyContainer;
 //   }

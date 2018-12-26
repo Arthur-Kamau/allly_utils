@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:register/pages/login_register/code_confirmation.dart';
 import 'package:register/pages/login_register/login.dart';
+import 'package:register/utils/phone_number.dart';
 
 class RegisterPage extends StatefulWidget {
   static String tag = 'register-page';
@@ -18,12 +19,38 @@ class _LoginPageState extends State<RegisterPage> {
   bool _isObscured = true;
   Color _eyeButtonColor = Colors.grey;
 
+  TextEditingController phoneNumberController = new TextEditingController();
+  TextEditingController countryCodeController = new TextEditingController();
+  TextEditingController nameController = new TextEditingController();
+
   Padding buildTitle() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Text(
         'Register',
         style: TextStyle(fontSize: 42.0, color: Colors.blue),
+      ),
+    );
+  }
+
+  Widget countryCodeTextField() {
+    return Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: Container(
+        margin: EdgeInsets.only(top: 25.0),
+        width: 40.0,
+        height: 60.0,
+        child: TextFormField(
+          controller: countryCodeController,
+          // initialValue: "+254",
+          keyboardType: TextInputType.numberWithOptions(),
+          onSaved: (phonenumberInput) => _phonenumber = phonenumberInput,
+          validator: (phonenumberInput) {
+            if (phonenumberInput.isEmpty) {
+              return 'Enter your nold phone number';
+            }
+          },
+        ),
       ),
     );
   }
@@ -44,6 +71,7 @@ class _LoginPageState extends State<RegisterPage> {
 
   TextFormField buildNameTextField() {
     return TextFormField(
+      controller: nameController,
       onSaved: (nameInput) => _name = nameInput,
       validator: (nameInput) {
         if (nameInput.isEmpty) {
@@ -56,6 +84,7 @@ class _LoginPageState extends State<RegisterPage> {
 
   TextFormField buildPhoneNumberTextField() {
     return TextFormField(
+      controller: phoneNumberController,
       keyboardType: TextInputType.number,
       onSaved: (phonenumberInput) => _phonenumber = phonenumberInput,
       validator: (phonenumberInput) {
@@ -78,6 +107,10 @@ class _LoginPageState extends State<RegisterPage> {
               //Only gets here if the fields pass
               _formKey.currentState.save();
               //TODO Check values and navigate to new page
+
+//store phone number
+// String filteredPhoneNumber = PhoneNumber().filterPhoneNumber(phoneNumberController.text, countryCodeController.text);
+// PhoneNumber().setPhoneNumber(filteredPhoneNumber);
 
               Navigator.of(context).pushNamed(ConfirmCode.tag);
             }
@@ -158,7 +191,14 @@ class _LoginPageState extends State<RegisterPage> {
             SizedBox(
               height: 30.0,
             ),
-            buildPhoneNumberTextField(),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: 100.0,
+              child: Row(children: <Widget>[
+                countryCodeTextField(),
+                buildPhoneNumberTextField()
+              ]),
+            ),
             SizedBox(
               height: 60.0,
             ),
