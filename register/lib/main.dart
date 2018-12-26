@@ -56,14 +56,20 @@ class AllyHomePageState extends State<AllyHomePage> {
   }
 
   Widget dataChoice(BuildContext context, AsyncSnapshot<AuthDetails> snapshot) {
+    print("\n\n\n\ We checking data choice ${snapshot.data.deviceId}\n");
+
     var val = snapshot.data;
-    if (val != null || val.authtoken.length > 0) {
+    if (val == null) {
       //show licence page
       return AllyLicencePage();
-    } else {
-      //user has token
-      //show app main page
-      return ChatHistory();
+    } else if (val != null) {
+      if (val.authtoken.length > 0) {
+        //user has token
+        //show app main page
+        return ChatHistory();
+      } else {
+        return AllyLicencePage();
+      }
     }
   }
 

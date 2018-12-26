@@ -33,24 +33,37 @@ class _LoginPageState extends State<RegisterPage> {
     );
   }
 
+  Widget buildPhoneNumberTextField() {
+    return Container(
+      child: TextFormField(
+        controller: phoneNumberController,
+        keyboardType: TextInputType.number,
+        onSaved: (phonenumberInput) => _phonenumber = phonenumberInput,
+        validator: (phonenumberInput) {
+          if (phonenumberInput.isEmpty) {
+            return 'Please enter your phone number';
+          }
+        },
+        // decoration: InputDecoration(labelText: 'Phone Number'),
+      ),
+    );
+  }
+
   Widget countryCodeTextField() {
-    return Padding(
-      padding: const EdgeInsets.all(5.0),
-      child: Container(
-        margin: EdgeInsets.only(top: 25.0),
-        width: 40.0,
-        height: 60.0,
-        child: TextFormField(
-          controller: countryCodeController,
-          // initialValue: "+254",
-          keyboardType: TextInputType.numberWithOptions(),
-          onSaved: (phonenumberInput) => _phonenumber = phonenumberInput,
-          validator: (phonenumberInput) {
-            if (phonenumberInput.isEmpty) {
-              return 'Enter your nold phone number';
-            }
-          },
-        ),
+    return Container(
+      // margin: EdgeInsets.only(top: 25.0),
+      width: 40.0,
+      height: 60.0,
+      child: TextFormField(
+        controller: countryCodeController,
+        // initialValue: "+254",
+        keyboardType: TextInputType.numberWithOptions(),
+        onSaved: (phonenumberInput) => _phonenumber = phonenumberInput,
+        validator: (phonenumberInput) {
+          if (phonenumberInput.isEmpty) {
+            return 'Enter your nold phone number';
+          }
+        },
       ),
     );
   }
@@ -79,20 +92,6 @@ class _LoginPageState extends State<RegisterPage> {
         }
       },
       decoration: InputDecoration(labelText: 'Name '),
-    );
-  }
-
-  TextFormField buildPhoneNumberTextField() {
-    return TextFormField(
-      controller: phoneNumberController,
-      keyboardType: TextInputType.number,
-      onSaved: (phonenumberInput) => _phonenumber = phonenumberInput,
-      validator: (phonenumberInput) {
-        if (phonenumberInput.isEmpty) {
-          return 'Please enter your phone number';
-        }
-      },
-      decoration: InputDecoration(labelText: 'Phone Number'),
     );
   }
 
@@ -173,6 +172,57 @@ class _LoginPageState extends State<RegisterPage> {
     );
   }
 
+  Widget buildNewPhoneNumberCountryCodeTextField() {
+    return Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: Container(
+        margin: EdgeInsets.only(top: 25.0),
+        width: 40.0,
+        height: 60.0,
+        child: TextFormField(
+          initialValue: "+254",
+          keyboardType: TextInputType.numberWithOptions(),
+          onSaved: (phonenumberInput) => _phonenumber = phonenumberInput,
+          validator: (phonenumberInput) {
+            if (phonenumberInput.isEmpty) {
+              return 'Enter your nold phone number';
+            }
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget buildNewPhoneNumberTextField() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        height: 60.0,
+        width: 200.0,
+        child: TextFormField(
+          keyboardType: TextInputType.number,
+          onSaved: (phonenumberInput) => _phonenumber = phonenumberInput,
+          validator: (phonenumberInput) {
+            if (phonenumberInput.isEmpty) {
+              return 'Enter your  phone number';
+            }
+          },
+          decoration: InputDecoration(labelText: 'Phone Number'),
+        ),
+      ),
+    );
+  }
+
+  Widget _userNumber() {
+    return Row(
+      children: <Widget>[
+        buildNewPhoneNumberCountryCodeTextField(),
+        SizedBox(width: 10.0),
+        buildNewPhoneNumberTextField()
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -191,14 +241,7 @@ class _LoginPageState extends State<RegisterPage> {
             SizedBox(
               height: 30.0,
             ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: 100.0,
-              child: Row(children: <Widget>[
-                countryCodeTextField(),
-                buildPhoneNumberTextField()
-              ]),
-            ),
+            _userNumber(),
             SizedBox(
               height: 60.0,
             ),

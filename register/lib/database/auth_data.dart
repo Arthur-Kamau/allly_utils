@@ -32,14 +32,27 @@ class AuthData {
 
   // Retrieving AuthDetailss from AuthDetails Tables
   Future<AuthDetails> getAuthDetails() async {
-    /*AuthDetails*/
     var dbClient = await db;
     List<Map> list = await dbClient.rawQuery('SELECT * FROM AuthDetails ');
     //WHERE deviceId=' + deviceId);
+    if (list.length > 0) {
+      print("data $list");
+      List<AuthDetails> auth_details = new List();
+      for (int i = 0; i < list.length; i++) {
+        auth_details.add(AuthDetails(
+          authStatus: int.parse(list[i]["authStatus"]),
+          authTime: DateTime.parse(list[i]["authTime"]),
+          authtoken: list[i]["authToken"],
+          deviceId: list[i]["deviceId"],
+        ));
+      }
+      print(auth_details.length);
 
-    print("data $list");
-
-    return AuthDetails();
+      return auth_details[0];
+    } else {
+      return AuthDetails(
+          authStatus: 0, authTime: DateTime.now(), deviceId: "", authtoken: "");
+    }
     // List<AuthDetails> AuthDetailss = new List();
     // for (int i = 0; i < list.length; i++) {
     //   AuthDetailss.add(new AuthDetails(list[i]["firstname"], list[i]["lastname"],
@@ -73,7 +86,14 @@ class AuthData {
     });
   }
 
-  void deleteUserDetails() {}
+  void deleteUserDetails() async {
+    var dbClient = await db;
+    // dbClient.rawDelete("DELETE * FROM AuthDetails");
+    dbClient.rawDelete(" DELETE FROM AuthDetails WHERE id = 1");
+    // await dbClient.transaction((txn) async {
+    //   return await txn.rawDelete("DELETE * FROM AuthDetails");
+    // });
+  }
 }
 
 class AuthDetails {
