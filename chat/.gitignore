@@ -1,22 +1,3 @@
-#all duplicates 
-
-/chat/android/
-/chat/build/
-/chat/ios/
-/chat/test/
-
-#for gallery contacts
-/gallery_contacts/android/
-/gallery_contacts/ios/
-/gallery_contacts/test/
-/gallery_contacts/build/
-
-#register
-/register/ios/
-/register/test/
-/register/build/
-/register/android/
-
 # Miscellaneous
 *.class
 *.lock
