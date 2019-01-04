@@ -13,9 +13,9 @@
 
 #register
 /register/ios/
-/register/test/
-/register/build/
-/register/android/
+register/test/
+register/build/
+register/android/
 
 # Miscellaneous
 *.class
