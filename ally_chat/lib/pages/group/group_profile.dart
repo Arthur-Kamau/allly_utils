@@ -53,7 +53,7 @@ class _GroupsDetailsState extends State<GroupsDetails> {
             new ListTile(
               leading: Icon(
                 Icons.account_box,
-                // color: GetAppStyle.getColor(),
+                // color: Colors.blue,
                 size: 26.0,
               ),
               title: Text(
@@ -62,13 +62,13 @@ class _GroupsDetailsState extends State<GroupsDetails> {
               ),
             ),
             Divider(
-              // color: GetAppStyle.getColor(),
+              // color: Colors.blue,
               indent: 16.0,
             ),
             new ListTile(
               leading: Icon(
                 Icons.account_box,
-                // color: GetAppStyle.getColor(),
+                // color: Colors.blue,
                 size: 26.0,
               ),
               title: Text(
@@ -77,13 +77,13 @@ class _GroupsDetailsState extends State<GroupsDetails> {
               ),
             ),
             Divider(
-              // color: GetAppStyle.getColor(),
+              // color: Colors.blue,
               indent: 16.0,
             ),
             new ListTile(
               leading: Icon(
                 Icons.account_box,
-                // color: GetAppStyle.getColor(),
+                // color: Colors.blue,
                 size: 26.0,
               ),
               title: Text(
@@ -92,13 +92,13 @@ class _GroupsDetailsState extends State<GroupsDetails> {
               ),
             ),
             Divider(
-              // color: GetAppStyle.getColor(),
+              // color: Colors.blue,
               indent: 16.0,
             ),
             new ListTile(
               leading: Icon(
                 Icons.email,
-                // color: GetAppStyle.getColor(),
+                // color: Colors.blue,
                 size: 26.0,
               ),
               title: Text(
@@ -108,13 +108,13 @@ class _GroupsDetailsState extends State<GroupsDetails> {
               //subtitle: Text(""),
             ),
             Divider(
-              // color: GetAppStyle.getColor(),
+              // color: Colors.blue,
               indent: 16.0,
             ),
             new ListTile(
               leading: Icon(
                 Icons.phone,
-                // color: GetAppStyle.getColor(),
+                // color: Colors.blue,
                 size: 26.0,
               ),
               title: Text(
@@ -188,7 +188,7 @@ class _GroupsDetailsState extends State<GroupsDetails> {
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return <Widget>[
               SliverAppBar(
-                // backgroundColor: GetAppStyle.getColor(),
+                // backgroundColor: Colors.blue,
                 expandedHeight: 200.0,
                 floating: false,
                 pinned: true,
@@ -304,7 +304,7 @@ class PopMenuDetails {
 //                 child: new ListTile(
 //                   leading: Icon(
 //                     Icons.account_box,
-//                     color: GetAppStyle.getColor(),
+//                     color: Colors.blue,
 //                     size: 26.0,
 //                   ),
 //                   title: Text(
@@ -318,7 +318,7 @@ class PopMenuDetails {
 //               child: new ListTile(
 //                 leading: Icon(
 //                   Icons.fingerprint,
-//                   color: GetAppStyle.getColor(),
+//                   color: Colors.blue,
 //                   size: 26.0,
 //                 ),
 //                 title: Text(
@@ -332,7 +332,7 @@ class PopMenuDetails {
 //               new ListTile(
 //                 leading: Icon(
 //                   Icons.alternate_email,
-//                   color: GetAppStyle.getColor(),
+//                   color: Colors.blue,
 //                   size: 26.0,
 //                 ),
 //                 title: Text(
@@ -397,7 +397,7 @@ class PopMenuDetails {
 //           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
 //             return <Widget>[
 //               SliverAppBar(
-//                 backgroundColor: GetAppStyle.getColor(),
+//                 backgroundColor: Colors.blue,
 //                 expandedHeight: 200.0,
 //                 floating: false,
 //                 pinned: true,

@@ -1,13 +1,9 @@
 import 'package:ally_chat/database/p2gChat.dart';
 import 'package:ally_chat/model/operations_models/chat_model.dart';
-import 'package:ally_chat/model/operations_models/contact_model.dart';
 import 'package:ally_chat/core/user.dart';
 import 'package:ally_chat/database/db.dart';
-import 'package:ally_chat/database/p2pChat.dart';
+import 'package:ally_chat/pages/attach_items/attach_items.dart';
 import 'package:ally_chat/pages/group/group_profile.dart';
-import 'package:ally_chat/pages/person/person_chat_view.dart';
-import 'package:ally_chat/pages/person/person_profile.dart';
-import 'package:ally_chat/pages/transition/slide_right_transition.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +17,7 @@ import 'package:ally_chat/pages/chat/image_overlay.dart';
 class P2GChatView extends StatefulWidget {
   static String tag = 'groups-chat-page';
   String groupId;
-String groupName;
+  String groupName;
 
   int contentText = 0;
   int contentImage = 1;
@@ -40,7 +36,7 @@ String groupName;
   int messageStatusfailed = 2;
   int messageStatusforwaded = 3;
 
-  P2GChatView({this.groupId,this.groupName});
+  P2GChatView({this.groupId, this.groupName});
 
   final WebSocketChannel channel =
       IOWebSocketChannel.connect('ws://echo.websocket.org');
@@ -624,23 +620,13 @@ class _P2GChatViewState extends State<P2GChatView>
               new Container(
                 child: IconButton(
                   icon: Icon(Icons.attach_file),
-                  onPressed: () async {
-                    //show bottom modal
-
-                    // final result = await ChatBottomModal(context: context)
-                    //     .ChatBottomModalDialog();
-
-                    // if (result != null) {
-                    //   print("\n\nResult from dialog $result \n\n\n");
-
-                    //   //delet the file finaly
-
-                    // } else {
-                    //   print("\n\nResult from dialog null ?? \n\n\n");
-                    // }
-                    // After the Selection Screen returns a result, show it in a Snackbar!
-                    // Scaffold.of(context)
-                    //     .showSnackBar(SnackBar(content: Text("$result")));
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AttachItems(),
+                      ),
+                    );
                   },
                 ),
               ),

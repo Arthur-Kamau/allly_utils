@@ -5,12 +5,22 @@ import 'package:flutter/material.dart';
 
 class UserPublicProfilePage extends StatefulWidget {
   static String tag = 'User-Public-Profile-page';
-  String userId;
-  UserPublicProfilePage({this.userId});
+
+  String userName;
+  String phoneNumber;
+
+  UserPublicProfilePage({this.userName,this.phoneNumber});
+
   _PublicProfilePageState createState() => _PublicProfilePageState();
 }
 
 class _PublicProfilePageState extends State<UserPublicProfilePage> {
+
+@override
+  void initState() { 
+    super.initState();
+    print("user name ${widget.userName}  and phone number ${widget.phoneNumber}");
+  }
   Widget _menuVert(BuildContext context) {
     return PopupMenuButton(
         onSelected: (choice) {
@@ -211,7 +221,7 @@ class _PublicProfilePageState extends State<UserPublicProfilePage> {
               title: new Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  new Text("kenn kamau",
+                  new Text(widget.userName,
                       style: new TextStyle(
                           fontWeight: FontWeight.bold, color: Colors.white)),
                 ],
@@ -292,7 +302,7 @@ class _PublicProfilePageState extends State<UserPublicProfilePage> {
             ),
             subtitle: new Container(
               padding: const EdgeInsets.only(top: 2.0),
-              child: new Text("07119110910129",
+              child: new Text(widget.phoneNumber,
                   style: new TextStyle(color: Colors.black, fontSize: 12.0)),
             ),
           ),

@@ -3,6 +3,8 @@ import 'package:ally_chat/model/operations_models/contact_model.dart';
 import 'package:ally_chat/core/user.dart';
 import 'package:ally_chat/database/db.dart';
 import 'package:ally_chat/database/p2pChat.dart';
+import 'package:ally_chat/pages/attach_items/attach_items.dart';
+import 'package:ally_chat/pages/chat/chat_history.dart';
 import 'package:ally_chat/pages/person/person_chat_view.dart';
 import 'package:ally_chat/pages/person/person_profile.dart';
 import 'package:ally_chat/pages/transition/slide_right_transition.dart';
@@ -108,6 +110,7 @@ class _P2PChatViewState extends State<P2PChatView>
   Future<Map<dynamic, dynamic>> contactsData;
 
   String name = "";
+  String phoneNumber = "";
 
   Future<Map<dynamic, dynamic>> _getContacts() async {
     Map<dynamic, dynamic> _conts = {};
@@ -162,18 +165,19 @@ class _P2PChatViewState extends State<P2PChatView>
 
   Widget _renderSenderName(
       Map<dynamic, dynamic> values, String compareAgainst) {
-    String name = "";
     for (var i = 0; i < values.length; i++) {
       String key = values.keys.elementAt(i);
-      print("_renderSenderName am checking ${widget.senderPhoneNumber} vs ${values[key]}");
+      print(
+          "_renderSenderName am checking ${widget.senderPhoneNumber} vs ${values[key]}");
       if (values[key] == compareAgainst) {
         name = key;
+        phoneNumber = values[key];
       }
     }
 
     if (name != null) {
       if (name.isNotEmpty) {
-        return Text("name");//name);
+        return Text(name);
       } else {
         //return number
         return Text(widget.senderPhoneNumber);
@@ -203,7 +207,7 @@ class _P2PChatViewState extends State<P2PChatView>
     return Container(
         child: FutureBuilder<Map<dynamic, dynamic>>(
       future: _getContacts(), //_calculateDistance( model,  store),
-      initialData: {"kamau": "kenn"}, //0.0,
+      initialData: {"User": "Data"}, //0.0,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return _getSenderName(context, snapshot);
@@ -742,23 +746,14 @@ class _P2PChatViewState extends State<P2PChatView>
               new Container(
                 child: IconButton(
                   icon: Icon(Icons.attach_file),
-                  onPressed: () async {
-                    //show bottom modal
-
-                    // final result = await ChatBottomModal(context: context)
-                    //     .ChatBottomModalDialog();
-
-                    // if (result != null) {
-                    //   print("\n\nResult from dialog $result \n\n\n");
-
-                    //   //delet the file finaly
-
-                    // } else {
-                    //   print("\n\nResult from dialog null ?? \n\n\n");
-                    // }
-                    // After the Selection Screen returns a result, show it in a Snackbar!
-                    // Scaffold.of(context)
-                    //     .showSnackBar(SnackBar(content: Text("$result")));
+                  onPressed: ()  {
+                    //  Navigator.pushNamed(context, AttachItems.tag);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AttachItems(),
+                      ),
+                    );
                   },
                 ),
               ),
@@ -939,7 +934,15 @@ class _P2PChatViewState extends State<P2PChatView>
             leading: IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: () {
-                Navigator.pop(context);
+                print("\n\n pressed \n\n");
+                //show chat history
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChatHistory(),
+                  ),
+                );
               },
             ),
             title: GestureDetector(
@@ -951,7 +954,8 @@ class _P2PChatViewState extends State<P2PChatView>
                   context,
                   MaterialPageRoute(
                     builder: (context) => UserPublicProfilePage(
-                          userId: widget.senderId,
+                          phoneNumber: phoneNumber,
+                          userName: name,
                         ),
                   ),
                 );
@@ -967,9 +971,6 @@ class _P2PChatViewState extends State<P2PChatView>
               _menuVert(context),
             ],
           ),
-
-      
-
           body: new Column(children: <Widget>[
             new Flexible(
                 child: ListView.builder(
@@ -987,8 +988,7 @@ class _P2PChatViewState extends State<P2PChatView>
               decoration: new BoxDecoration(color: Theme.of(context).cardColor),
             ),
           ]),
-        )
-        );
+        ));
   }
 }
 
@@ -1226,4 +1226,3 @@ class MyMessage extends StatelessWidget {
         child: _myMessage(ctx));
   }
 }
-

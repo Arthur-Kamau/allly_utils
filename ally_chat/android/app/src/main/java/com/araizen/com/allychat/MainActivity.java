@@ -142,29 +142,62 @@ public class MainActivity extends FlutterActivity {
   private List<String> getAppsApk() {
 
       List<String> meApk = new ArrayList<String>();
-      PackageManager manager = getApplicationContext().getPackageManager();
-      final List<PackageInfo> apps = manager.getInstalledPackages(0);
-      for (PackageInfo packageInfo : apps) {
-          ApplicationInfo applicationInfo = packageInfo.applicationInfo;
-          boolean isSystemApp = ((applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0);
-          Log.i("SystemApps", packageInfo.packageName + ", isSystemApp="+isSystemApp);
-          if(!isSystemApp){
-              meApk.add(applicationInfo.name);
-          }
-      }
 
 
-//    final Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
-//    mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-//    List<ResolveInfo> apps = getPackageManager().queryIntentActivities(mainIntent, 0);
-//    for (ResolveInfo info : apps) {
-//      File file = new File(info.activityInfo.applicationInfo.publicSourceDir);
-//      // Copy the .apk file to wherever
-//      meApk.add(file.getAbsolutePath());
+//   final Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+//   mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+//   List<ResolveInfo> apps = getPackageManager().queryIntentActivities(mainIntent, 0);
+//   for (ResolveInfo info : apps) {
+//
+//     File file = new File(info.activityInfo.applicationInfo.publicSourceDir);
+//     // Copy the .apk file to wherever
+//     meApk.add(file.getAbsolutePath());
+//
+//   }
+
+//    PackageManager manager = getApplicationContext().getPackageManager();
+//    final List<PackageInfo> apps = manager.getInstalledPackages(0);
+//    for (PackageInfo packageInfo : apps) {
+//      ApplicationInfo applicationInfo = packageInfo.applicationInfo;
+//      boolean isSystemApp = ((applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0);
+//      Log.i("SystemApps", packageInfo.packageName + ", isSystemApp="+isSystemApp);
+//      if(!isSystemApp){
+//
+//        meApk.add(packageInfo.packageName);//applicationInfo.name);
+//        Log.i("user App", "App->"+packageInfo.packageName );
+//      }
+//
 //    }
+//
 
+
+    final PackageManager pm = getPackageManager();
+
+    //list installed apps
+    List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
+
+
+    for (ApplicationInfo appInfo : packages){
+      Log.i("user App", "package name->"+appInfo.packageName );
+      Log.i("user App", "source di->"+appInfo.sourceDir );
+      File file = new File(appInfo.publicSourceDir);
+      // Copy the .apk file to wherever
+      //meApk.add(file.getAbsolutePath());
+      Log.i("user App", "path->"+file.getAbsolutePath() );
+
+
+      meApk.add(appInfo.sourceDir);
+
+    }
+
+        Log.i("---------me apk", "list length ->"+meApk.size()+"at ------>"+meApk.get(0));
     return meApk;
 
+  }
+
+
+  private  boolean isSystemPackage(PackageInfo pkgInfo){
+    return ((pkgInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0);
   }
 
   private List<String> getAllVideoPaths() {

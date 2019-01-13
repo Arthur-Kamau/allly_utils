@@ -24,6 +24,10 @@ dependencies:
   dio: ^1.0.13
   web_socket_channel:
   cached_network_image: ^0.5.1
+  path: any
+  camera: ^0.2.6
+  #url launcher
+  url_launcher: ^4.0.1
 
 dev_dependencies:
   flutter_test:
@@ -41,10 +45,46 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
-  # To add assets to your application, add an assets section, like this:
-  # assets:
-  #  - images/a_dot_burr.jpeg
-  #  - images/a_dot_ham.jpeg
+   # To add assets to your application, add an assets section, like this:
+  assets:
+    #theme picker images
+    - assets/images/color_picker.jpeg
+    - assets/images/font_picker.png
+    - assets/images/theme_picker.jpeg
+    - assets/images/theme_picker.png
+
+    - assets/icons/STYLLING_ICON_THEME.svg
+    - assets/icons/STYLLING_ICON_FONT.svg
+    - assets/icons/STYLLING_ICON_COLOR.svg
+     
+    #devlopers
+    - assets/images/developers/araizen.jpg
+    #discover icons
+    - assets/images/login_logo.png
+    #image
+    - assets/images/0.png
+    - assets/images/1.png
+    - assets/images/2.png
+    - assets/images/3.png
+    - assets/images/birds.jpg
+    - assets/images/background.jpg
+    - assets/images/avatar.jpg
+    - assets/images/kenn.jpg
+    #slider image
+    - assets/images/slider/banks.png
+    - assets/images/slider/hotels.png
+    - assets/images/slider/key.png
+    - assets/images/slider/shopping_cart.png
+    - assets/images/slider/stores.png
+    - assets/images/slider/wallet.png
+    #icons
+    - assets/icons/Ally_icon_Black.png
+    - assets/icons/Ally_icon_Blue.png
+    - assets/icons/Ally_icon_Gold.png
+    - assets/icons/Ally_icon_White.png
+  
+  
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
@@ -64,7 +104,7 @@ flutter:
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro
-  #     fonts:
+  #     fonts:\
   #       - asset: fonts/TrajanPro.ttf
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700

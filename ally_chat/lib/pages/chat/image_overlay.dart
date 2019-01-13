@@ -78,7 +78,8 @@ class ImageOverlay extends ModalRoute<void> {
                       'https://images.pexels.com/photos/935969/pexels-photo-935969.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940')),
               color: Colors.red, //transparent,
             ),
-          )),
+          )
+          ),
         ],
       ),
     );

@@ -5,7 +5,7 @@ import 'package:ally_chat/pages/person/person_chat_view.dart';
 import 'package:flutter/material.dart';
 import 'package:ally_chat/model/operations_models/contact_model.dart';
 import 'package:ally_chat/pages/group/groups_chat_view.dart';
-
+import 'package:ally_chat/pages/bottom_modal/main_bottom_modal.dart';
 class ChatHistory extends StatefulWidget {
   static String tag = 'chat-history-page';
   _ChatHistoryState createState() => _ChatHistoryState();
@@ -16,12 +16,13 @@ class _ChatHistoryState extends State<ChatHistory>
   Widget appBar(BuildContext context) {
     return new AppBar(
 
-        // leading: IconButton(
-        //   icon: Icon(Icons.menu),
-        //   onPressed: (){
-        //      MainBottomModal(context: context).MainBottomModalDialog();
-        //   },
-        // ),
+        leading: IconButton(
+          icon: Icon(Icons.menu),
+          onPressed: (){
+           //  MainBottomModal(context: context).MainBottomModalDialog();
+           MainBottomModal(context: context).MainBottomModalDialog();
+          },
+        ),
         backgroundColor: Colors.blue,
         title: new Text("Chats"),
         elevation: 0.7,
@@ -53,7 +54,7 @@ class _ChatHistoryState extends State<ChatHistory>
         //this.chatId, this.senderId, this.recepientId
 
         print(
-            "\n\n tap list item peer senderid  ${personChatHistory.senderId} phone number -->${personChatHistory.phoneNumber} \n\n");
+            "\n\n tap list item peer senderid  ${personChatHistory.senderId} phone number -->${personChatHistory.senderPhoneNumber} \n\n");
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -61,13 +62,11 @@ class _ChatHistoryState extends State<ChatHistory>
                   chatId: personChatHistory.groupId,
                   senderId: personChatHistory.senderId,
                   recepientId: personChatHistory.recepientId,
-                  senderPhoneNumber: personChatHistory.phoneNumber,
+                  senderPhoneNumber: personChatHistory.senderPhoneNumber,
                   recepientPhoneNumber: User.phoneNumber,
                 ),
           ),
         );
-
-  
       },
       leading: new CircleAvatar(
           foregroundColor: Theme.of(context).primaryColor,
@@ -79,17 +78,17 @@ class _ChatHistoryState extends State<ChatHistory>
           new Text(
               //show name from local name based on sender id=Userid or number
               getPersonName(personChatHistory.senderId).isEmpty
-                  ? personChatHistory.phoneNumber
+                  ? personChatHistory.senderPhoneNumber
                   : getPersonName(personChatHistory.senderId),
               // chatHistory.groupName,
               style: new TextStyle(fontWeight: FontWeight.bold)),
-          new Text(personChatHistory.number,
+          new Text(personChatHistory.numberMessage,
               style: new TextStyle(color: Colors.grey, fontSize: 12.0))
         ],
       ),
       subtitle: new Container(
         padding: const EdgeInsets.only(top: 2.0),
-        child: new Text(personChatHistory.status,
+        child: new Text(personChatHistory.status.toString(),
             style: new TextStyle(color: Colors.grey, fontSize: 12.0)),
       ),
     );
@@ -99,7 +98,7 @@ class _ChatHistoryState extends State<ChatHistory>
     return new ListTile(
       onTap: () {
         print(
-            "tap list item chat type --> ${chatHistory.chattype} groupname  --> ${chatHistory.groupName}  phone number---> ${chatHistory.phoneNumber} ");
+            "tap list item chat type --> ${chatHistory.chattype} groupname  --> ${chatHistory.groupName}  phone number---> ${chatHistory.senderPhoneNumber} ");
 
         print("\n\n tap list item group \n\n ");
         Navigator.push(
@@ -108,7 +107,7 @@ class _ChatHistoryState extends State<ChatHistory>
             builder: (context) => P2GChatView(
                   //  chatId: chatHistory.chatId,
                   groupId: chatHistory.groupId,
-                  groupName: chatHistory.groupName ,
+                  groupName: chatHistory.groupName,
                 ),
           ),
         );
@@ -122,13 +121,13 @@ class _ChatHistoryState extends State<ChatHistory>
         children: <Widget>[
           new Text(chatHistory.groupName,
               style: new TextStyle(fontWeight: FontWeight.bold)),
-          new Text(chatHistory.number,
+          new Text(chatHistory.numberMessage,
               style: new TextStyle(color: Colors.grey, fontSize: 12.0))
         ],
       ),
       subtitle: new Container(
         padding: const EdgeInsets.only(top: 2.0),
-        child: new Text(chatHistory.status,
+        child: new Text(chatHistory.status.toString(),
             style: new TextStyle(color: Colors.grey, fontSize: 12.0)),
       ),
     );
@@ -147,20 +146,36 @@ class _ChatHistoryState extends State<ChatHistory>
     }
   }
 
+  List<ChatHistoryModel> chatData;
+
+  void initState() {
+    super.initState();
+    //get messages
+
+  }
+
   Widget _messages() {
-    return Container(
-      child: new ListView.builder(
-        itemCount: dummyData.length,
-        itemBuilder: (context, i) => new Column(
-              children: <Widget>[
-                _chatTile(dummyData[i]),
-                new Divider(
-                  height: 5.0,
-                ),
-              ],
-            ),
-      ),
-    );
+    if (chatData != null && chatData.length > 0) {
+      return Container(
+        child: new ListView.builder(
+          itemCount: chatData.length,
+          itemBuilder: (context, i) => new Column(
+                children: <Widget>[
+                  _chatTile(chatData[i]),
+                  new Divider(
+                    height: 5.0,
+                  ),
+                ],
+              ),
+        ),
+      );
+    } else {
+      return Center(
+              child: Container(
+          child: Text("No recent chats"),
+        ),
+      );
+    }
   }
 
   var divide = Container(
@@ -179,7 +194,15 @@ class _ChatHistoryState extends State<ChatHistory>
         tooltip: "messages",
         backgroundColor: Colors.blue,
         onPressed: () {
-          Navigator.pushNamed(context, ContactsSelectOne.tag);
+          //Navigator.pushNamed(context, ContactsSelectOne.tag);
+           Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ContactsSelectOne(
+                         
+                        ),
+                  ),
+                );
         },
         child: Icon(Icons.message),
       ),
