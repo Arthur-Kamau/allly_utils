@@ -17,7 +17,7 @@ var interest_list = [
   InterestListModel(
     id: 1,
     category: "T",
-    interst : "Fechnology",
+    interst : "Technology",
   ),
   InterestListModel(
     id: 1,

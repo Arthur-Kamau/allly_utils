@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ally_chat/model/operations_models/contact_model.dart';
 import 'package:ally_chat/pages/attach_items/pictures_screen.dart';
 import 'package:ally_chat/pages/settings/account/change_email.dart';
@@ -12,6 +14,7 @@ class UserProfile extends StatefulWidget {
 
 class _UserProfileState extends State<UserProfile> {
   List<String> _importedcontacts = [];
+  String imagePath = "";
 
   List<Widget> _crateInterstChilderenItems() {
     List<Widget> _widgetItems = [];
@@ -201,6 +204,23 @@ class _UserProfileState extends State<UserProfile> {
     );
   }
 
+  Widget _showAppropriatImage() {
+    if (imagePath == null || imagePath.isEmpty) {
+      return Image.asset(
+        "assets/images/kenn.jpg",
+        fit: BoxFit.cover,
+        width: MediaQuery.of(context).size.width,
+      );
+    } else {
+      File imgfile = new File(imagePath);
+      return Image.file(
+        imgfile,
+        fit: BoxFit.cover,
+        width: MediaQuery.of(context).size.width,
+      );
+    }
+  }
+
   Widget _divider() {
     return Divider(
       height: 5.0,
@@ -209,7 +229,7 @@ class _UserProfileState extends State<UserProfile> {
 
   Widget _personalData() {
     return ListView(
-          children: <Widget>[
+      children: <Widget>[
         Container(
           height: 500.0,
           margin: EdgeInsets.only(left: 10.0, right: 10.0),
@@ -289,12 +309,7 @@ class _UserProfileState extends State<UserProfile> {
                       height: 200.0,
                       child: Stack(
                         children: <Widget>[
-                          Image.asset(
-                            "assets/images/kenn.jpg",
-                            //"https://images.pexels.com/photos/396547/pexels-photo-396547.jpeg?auto=compress&cs=tinysrgb&h=350",
-                            fit: BoxFit.cover,
-                            width: MediaQuery.of(context).size.width,
-                          ),
+                          _showAppropriatImage(),
                           Align(
                             alignment: Alignment.bottomRight,
                             child: IconButton(
@@ -304,12 +319,16 @@ class _UserProfileState extends State<UserProfile> {
                                 size: 26.0,
                                 color: Colors.black87,
                               ),
-                              onPressed: () {
-                                Navigator.push(
+                              onPressed: () async {
+                                var res = await Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
                                             PicturesScreen()));
+                                print("result is $res");
+                                setState(() {
+                                  imagePath = res;
+                                });
                               },
                             ),
                           )

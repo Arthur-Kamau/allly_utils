@@ -3,6 +3,15 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 
 class ContactsScreen extends StatefulWidget {
+  
+  String userChatName;
+  String userChatPhoneNumber;
+  String userChatMessage;
+
+  ContactsScreen(
+      {this.userChatName, this.userChatPhoneNumber, this.userChatMessage});
+
+
   @override
   ContactsScreenState createState() {
     return new ContactsScreenState();

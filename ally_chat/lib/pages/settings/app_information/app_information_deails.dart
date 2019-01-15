@@ -54,7 +54,7 @@ Widget _topBar(){
             margin: EdgeInsets.all(20.0),
             child: Text("""
 Your are Currently running Ally Super App Version 4.0.0.
-
+\n (Minified verision)
   """),
           ),
           Container(

@@ -87,7 +87,7 @@ Widget _newEmail(){
                 _formKey.currentState.save();
                 //TODO Check values and navigate to new page
                 
-                Navigator.pop(context, textFieldController.text);
+                Navigator.pop(context, textFieldController.text == null ? "" : textFieldController.text);
               }
             },
             color: Colors.blue,

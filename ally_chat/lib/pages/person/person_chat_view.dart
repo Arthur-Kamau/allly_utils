@@ -62,6 +62,10 @@ class P2PChatView extends StatefulWidget {
   int contentImage = 1;
   int contentVideo = 2;
   int contentLocation = 3;
+  int contentImageWthText =4;
+  int contentAudio =5;
+  int contentApk =6;
+  int contentContact =7;
 
   int chatCategory = 0;
 

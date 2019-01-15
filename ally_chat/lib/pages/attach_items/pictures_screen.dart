@@ -3,7 +3,16 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart' as path;
 
+//inent 1 --> settings profile attach image
+//intent 2 -->chat
 class PicturesScreen extends StatefulWidget {
+
+int intent;
+ String userChatName;
+  String userChatPhoneNumber;
+  String userChatMessage;
+
+  PicturesScreen({this.intent,this.userChatName, this.userChatPhoneNumber, this.userChatMessage});
   @override
   PicturesScreenState createState() {
     return new PicturesScreenState();
@@ -46,6 +55,10 @@ class PicturesScreenState extends State<PicturesScreen> {
                 ),
                 style: TextStyle(fontSize: 13.0),
               ),
+              onTap: () {
+                Navigator.pop(context, values[index]);
+              },
+              onLongPress: () {},
             ),
             new Divider(
               height: 2.0,
@@ -78,8 +91,6 @@ class PicturesScreenState extends State<PicturesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(body: _showAppropriatewidget()));
+    return Scaffold(body: _showAppropriatewidget());
   }
 }

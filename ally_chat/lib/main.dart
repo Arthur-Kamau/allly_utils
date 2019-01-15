@@ -1,4 +1,5 @@
 import 'package:ally_chat/pages/attach_items/attach_items.dart';
+import 'package:ally_chat/pages/contacts/contacts_select_many.dart';
 import 'package:ally_chat/pages/group/group_profile.dart';
 import 'package:ally_chat/pages/group/groups_chat_view.dart';
 import 'package:ally_chat/pages/person/person_chat_view.dart';
@@ -30,7 +31,10 @@ class AllyHomePage extends StatelessWidget {
     //ChatHistory
     ChatHistory.tag: (context) => ChatHistory(),
 
+    ContactsSelectMany.tag: (context) => ContactsSelectMany(),
     ContactsSelectOne.tag: (context) => ContactsSelectOne(),
+
+    
     GroupsDetails.tag: (context) => GroupsDetails(),
 
     P2GChatView.tag: (context) => P2GChatView(),
@@ -54,7 +58,7 @@ class AllyHomePage extends StatelessWidget {
     LogOutPolicy.tag: (context) => LogOutPolicy(),
     LogoutSplashScreen.tag: (context) => LogoutSplashScreen(),
     SyncData.tag: (context) => SyncData(),
-     UserProfile.tag: (context) => UserProfile(),
+    UserProfile.tag: (context) => UserProfile(),
   };
 
   @override

@@ -9,6 +9,30 @@ CREATE TABLE contacts (
     updatedAt TEXT
 );
 """;
+  static String profileTable = """
+CREATE TABLE user_profile (
+  id INTEGER PRIMARY KEY  AUTOINCREMENT,
+  
+  user_image_url Text,
+  user_image_local Text,
+
+  user_name TEXT,
+  user_phone_number TEXT,
+ 
+  user_status TEXT,
+  user_location TEXT,
+
+
+   user_what_i_do TEXT,
+  user_gender TEXT,
+
+  user_interest TEXT,
+  user_email TEXT,
+
+    createdAt TEXT ,
+    updatedAt TEXT
+);
+""";
 
   static String usersTable = """
 	CREATE TABLE IF NOT EXISTS users_table (
@@ -47,7 +71,7 @@ CREATE TABLE contacts (
     updatedAt TEXT
 	)""";
 
- static String blockedTable = """
+  static String blockedTable = """
 CREATE TABLE IF NOT EXISTS user_contacts_blocked (
 		id serial PRIMARY KEY,
 
@@ -123,8 +147,6 @@ CREATE TABLE IF NOT EXISTS user_contacts_blocked (
  createdAt TEXT ,
     updatedAt TEXT
 	)""";
-
-
 
   static String chatsP2PTable = """
 CREATE TABLE IF NOT EXISTS chat_p2p_table (

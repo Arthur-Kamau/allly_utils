@@ -141,7 +141,7 @@ return true;
                       }
   }
 
-  Widget chats(BuildContext context) {
+  Widget interestList(BuildContext context) {
     return new ListView.builder(
       itemCount: interest_list.length,
       itemBuilder: (context, i) => new Column(
@@ -152,7 +152,7 @@ return true;
                 onTap: () {
                   print("contact choi");
                 },
-                leading:_generateUserChar(interest_list[i].interst,interest_list[i].category) ,
+              // leading:_generateUserChar(interest_list[i].interst,interest_list[i].category) ,
                 title: new Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
@@ -195,7 +195,7 @@ return true;
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: appBar(context),
-      body: chats(context),
+      body: interestList(context),
     );
   }
 }

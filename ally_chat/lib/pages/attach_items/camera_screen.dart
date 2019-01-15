@@ -5,7 +5,17 @@ import 'package:camera/camera.dart';
 List<CameraDescription> cameras;
 
 class CameraScreen extends StatelessWidget {
-  CameraScreen() {
+   String userChatName;
+  String userChatPhoneNumber;
+  String userChatMessage;
+
+
+
+  CameraScreen({String userChatName, String userChatPhoneNumber, String userChatMessage}) {
+    this.userChatName =userChatName ;
+    this.userChatPhoneNumber = userChatPhoneNumber; 
+    this.userChatMessage = userChatMessage;
+
     getAvailableCameras();
   }
 
@@ -100,6 +110,12 @@ class _CameraViewState extends State<CameraView> {
     );
   }
 
+  Widget _divider() {
+    return Divider(
+      height: 5.0,
+    );
+  }
+
   Widget _thecamera() {
     return new AspectRatio(
       aspectRatio: controller.value.aspectRatio,
@@ -128,7 +144,57 @@ class _CameraViewState extends State<CameraView> {
                       child: Material(
                         color: Colors.transparent,
                         child: InkWell(
-                          onTap: () {},
+                          borderRadius: BorderRadius.circular(30.0),
+                          onTap: () async {
+                            String res = await showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return SimpleDialog(
+                                    title: const Text('Camera Preferences'),
+                                    children: <Widget>[
+                                      Container(
+                                        margin: EdgeInsets.all(5.0),
+                                        padding: EdgeInsets.all(5.0),
+                                        child: Column(
+                                          children: <Widget>[
+                                            // SizedBox(
+                                            //   width: 20.0,
+                                            // ),
+                                            SimpleDialogOption(
+                                              onPressed: () {
+                                                Navigator.pop(context, "Male");
+                                              },
+                                              child: Container(
+                                                child: SwitchListTile(
+                                                  title: Text(
+                                                      "Flashlight",style: TextStyle(fontSize: 12),),
+                                                  // subtitle:Text("on"),
+                                                  value: true,
+                                                  onChanged: (option) {},
+                                                ),
+                                              ),
+                                            ),
+                                            _divider(),
+                                            SimpleDialogOption(
+                                              onPressed: () {
+                                                Navigator.pop(
+                                                    context, 1);
+                                              },
+                                              child: Container(
+                                                  height: 30.0,
+                                                  child: Center(
+                                                      child: Text("Camera item",style: TextStyle(fontSize: 12),))),
+                                            ),
+                                           
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                });
+
+                            print("res");
+                          },
                           child: Icon(
                             Icons.settings,
                             color: Colors.white,

@@ -30,6 +30,8 @@ class AllyNativeDb {
     print("\n\n Create tables \n\n");
     //contact list
     await db.execute(Query.contactListTableSql);
+    //contact list
+    await db.execute(Query.profileTable);
     //users table
     await db.execute(Query.usersTable);
     //groups table

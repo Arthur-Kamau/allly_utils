@@ -382,10 +382,11 @@ final dividerWidget=new Center(
         blockedWidget,
        // dividerWidget,
       //  syncWidget,
+       dividerWidget,
+        appInformationWidget,
         dividerWidget,
         helpWidget,
-        dividerWidget,
-        appInformationWidget,
+       
         dividerWidget,
         licenceWidget,
       ],

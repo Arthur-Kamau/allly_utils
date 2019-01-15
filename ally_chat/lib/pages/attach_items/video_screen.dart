@@ -5,6 +5,14 @@ import 'package:flutter/services.dart';
 import 'package:path/path.dart' as path;
 
 class VideoScreen extends StatefulWidget {
+   String userChatName;
+  String userChatPhoneNumber;
+  String userChatMessage;
+
+  VideoScreen(
+      {this.userChatName, this.userChatPhoneNumber, this.userChatMessage});
+
+
   @override
   VideoScreenState createState() {
     return new VideoScreenState();

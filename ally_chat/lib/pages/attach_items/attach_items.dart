@@ -1,3 +1,4 @@
+import 'package:ally_chat/core/intent.dart';
 import 'package:flutter/material.dart';
 import 'package:ally_chat/pages/attach_items/video_screen.dart';
 import 'package:ally_chat/pages/attach_items/contactrs_screen.dart';
@@ -8,6 +9,13 @@ import 'package:ally_chat/pages/attach_items/apps_screen.dart';
 
 class AttachItems extends StatefulWidget {
   static String tag = 'attch-items-page';
+  String userChatName;
+  String userChatPhoneNumber;
+  String userChatMessage;
+
+  AttachItems(
+      {this.userChatName, this.userChatPhoneNumber, this.userChatMessage});
+
   _AttachItemsState createState() => _AttachItemsState();
 }
 
@@ -26,10 +34,10 @@ class _AttachItemsState extends State<AttachItems>
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-          home: Scaffold(
+      home: Scaffold(
         appBar: new AppBar(
           // title: new Text("Ally App"),
-leading: Container(),
+          leading: Container(),
           elevation: 0.7,
 
           flexibleSpace: SafeArea(
@@ -88,12 +96,31 @@ leading: Container(),
         body: new TabBarView(
           controller: _tabController,
           children: <Widget>[
-            new CameraScreen(),
-            new ContactsScreen(),
-            new PicturesScreen(),
-            new MusicScreen(),
-            new VideoScreen(),
-            new AppsScreen(),
+            new CameraScreen(
+                userChatName: widget.userChatMessage,
+                userChatPhoneNumber: widget.userChatPhoneNumber,
+                userChatMessage: widget.userChatMessage),
+            new ContactsScreen(
+                userChatName: widget.userChatMessage,
+                userChatPhoneNumber: widget.userChatPhoneNumber,
+                userChatMessage: widget.userChatMessage),
+            new PicturesScreen(
+              intent: Intent.picturesScreenChatIntent,
+                userChatName: widget.userChatMessage,
+                userChatPhoneNumber: widget.userChatPhoneNumber,
+                userChatMessage: widget.userChatMessage),
+            new MusicScreen(
+                userChatName: widget.userChatMessage,
+                userChatPhoneNumber: widget.userChatPhoneNumber,
+                userChatMessage: widget.userChatMessage),
+            new VideoScreen(
+                userChatName: widget.userChatMessage,
+                userChatPhoneNumber: widget.userChatPhoneNumber,
+                userChatMessage: widget.userChatMessage),
+            new AppsScreen(
+                userChatName: widget.userChatMessage,
+                userChatPhoneNumber: widget.userChatPhoneNumber,
+                userChatMessage: widget.userChatMessage),
           ],
         ),
       ),

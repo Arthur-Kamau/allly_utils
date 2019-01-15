@@ -91,7 +91,7 @@ Widget _newEmail(){
                 //TODO Check values and navigate to new page
                 
 
-                Navigator.pop(context, emailTextFieldController.text);
+                Navigator.pop(context, emailTextFieldController.text == null ? "" : emailTextFieldController.text);
               }
             },
             color: Colors.blue,

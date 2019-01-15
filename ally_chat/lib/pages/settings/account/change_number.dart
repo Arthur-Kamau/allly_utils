@@ -65,7 +65,6 @@ TextEditingController newNumberTextFieldController = TextEditingController();
         height: 60.0,
         child: TextFormField(
           initialValue: "+254",
-           controller: oldNumberTextFieldController,
           keyboardType: TextInputType.numberWithOptions(),
           onSaved: (phonenumberInput) => _phonenumber = phonenumberInput,
           validator: (phonenumberInput) {
@@ -108,6 +107,7 @@ TextEditingController newNumberTextFieldController = TextEditingController();
         height:60.0 ,
         width: 200.0,
         child: TextFormField(
+         controller: oldNumberTextFieldController,
           keyboardType: TextInputType.number,
           onSaved: (phonenumberInput) => _phonenumber = phonenumberInput,
           validator: (phonenumberInput) {
@@ -181,7 +181,7 @@ Widget _newNumber(){
                 //TODO Check values and navigate to new page
                 
                  
-                Navigator.pop(context, newNumberTextFieldController.text);
+                Navigator.pop(context, newNumberTextFieldController.text  == null ? "": newNumberTextFieldController.text);
               }
             },
             color: Colors.blue,

@@ -87,12 +87,12 @@ Widget _newEmail(){
                 _formKey.currentState.save();
                 //TODO Check values and navigate to new page
                 
-                   Navigator.pop(context, textFieldController.text);
+                   Navigator.pop(context, textFieldController.text == null ? "name" :textFieldController.text  );
               }
             },
             color: Colors.blue,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
-            child: Text('Change Do status', style: Theme
+            child: Text('Change name', style: Theme
               .of(context)
               .primaryTextTheme
               .button,),

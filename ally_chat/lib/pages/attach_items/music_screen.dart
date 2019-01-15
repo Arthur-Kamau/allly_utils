@@ -4,6 +4,13 @@ import 'package:flutter/services.dart';
 import 'package:path/path.dart' as path;
 
 class MusicScreen extends StatefulWidget {
+  String userChatName;
+  String userChatPhoneNumber;
+  String userChatMessage;
+
+  MusicScreen(
+      {this.userChatName, this.userChatPhoneNumber, this.userChatMessage});
+
   @override
   MusicScreenState createState() {
     return new MusicScreenState();

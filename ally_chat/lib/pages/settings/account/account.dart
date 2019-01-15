@@ -24,7 +24,7 @@ class _UserAccountState extends State<UserAccount> {
   String _myName = "name";
   String _myLocation = "location";
   String _doStatus = "doing status";
-  String _myphoneNumber = "07...";
+  // String _myphoneNumber = "07...";
   String _myEmail = "me@mail.com";
   List<String> _myInterests = ["Social"];
 
@@ -56,293 +56,320 @@ class _UserAccountState extends State<UserAccount> {
     }
   }
 
+  Widget _userDetailEmail() {
+    return GestureDetector(
+      onTap: () async {
+        final result = await Navigator.push(
+          context,
+          // We'll create the SelectionScreen in the next step!
+          MaterialPageRoute(builder: (context) => AccountChangeEmail()),
+        );
+        if (result != null && result.toString().isNotEmpty) {
+          setState(() {
+            _myEmail = result;
+          });
+        }
+      },
+      child: new ListTile(
+        title: new Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            new Text("Email",
+                style: new TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.black)),
+            Icon(
+              Icons.edit,
+              color: Colors.blue,
+            )
+          ],
+        ),
+        subtitle: new Container(
+          padding: const EdgeInsets.only(top: 2.0),
+          child: new Text(_myEmail,
+              style: new TextStyle(color: Colors.black, fontSize: 12.0)),
+        ),
+      ),
+    );
+  }
+
+//   Widget _userDetailPhoneNumber() {
+//     return GestureDetector(
+//       onTap: () async {
+//         print("click --> \n\n number ----------");
+//         final result = await Navigator.push(
+//           context,
+//           // We'll create the SelectionScreen in the next step!
+//           MaterialPageRoute(builder: (context) => AccountChangeNumber()),
+//         );
+// print("result $result \n\n -------------- \n\n");
+//         if (result != null && result.toString().isNotEmpty) {
+//           setState(() {
+//             _myphoneNumber = result;
+//           });
+//         }
+//       },
+//       child: new ListTile(
+//         title: new Row(
+//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//           children: <Widget>[
+//             new Text("Phone number",
+//                 style: new TextStyle(
+//                     fontWeight: FontWeight.bold, color: Colors.black)),
+//             Icon(
+//               Icons.edit,
+//               color: Colors.blue,
+//             )
+//           ],
+//         ),
+//         subtitle: new Container(
+//           padding: const EdgeInsets.only(top: 2.0),
+//           child: new Text(_myphoneNumber,
+//               style: new TextStyle(color: Colors.black, fontSize: 12.0)),
+//         ),
+//       ),
+//     );
+//   }
+
+  Widget _userDetailGender() {
+    return GestureDetector(
+      onTap: () async {
+        String res = await showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return SimpleDialog(
+                title: const Text('Gender Preferences'),
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.all(5.0),
+                    padding: EdgeInsets.all(5.0),
+                    child: Column(
+                      children: <Widget>[
+                        SizedBox(
+                          width: 20.0,
+                        ),
+                        SimpleDialogOption(
+                          onPressed: () {
+                            Navigator.pop(context, "Male");
+                          },
+                          child: Container(
+                              height: 30.0, child: Center(child: Text("Male"))),
+                        ),
+                        _divider(),
+                        SimpleDialogOption(
+                          onPressed: () {
+                            Navigator.pop(context, "Female");
+                          },
+                          child: Container(
+                              height: 30.0,
+                              child: Center(child: Text("Female"))),
+                        ),
+                        _divider(),
+                        SimpleDialogOption(
+                          onPressed: () {
+                            Navigator.pop(context, "Other");
+                          },
+                          child: Container(
+                              height: 30.0,
+                              child: Center(child: Text("Other"))),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            });
+
+        print("result discover preference dialogue $res");
+        if (res != null && res.toString().isNotEmpty) {
+          setState(() {
+            _myGender = res;
+          });
+        }
+      },
+      child: new ListTile(
+        title: new Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            new Text("Gender",
+                style: new TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.black)),
+            Icon(
+              Icons.edit,
+              color: Colors.blue,
+            )
+          ],
+        ),
+        subtitle: new Container(
+          padding: const EdgeInsets.only(top: 2.0),
+          child: new Text(_myGender,
+              style: new TextStyle(color: Colors.black, fontSize: 12.0)),
+        ),
+      ),
+    );
+  }
+
+  Widget _userDetailWhatIDo() {
+    return GestureDetector(
+      onTap: () async {
+        final result = await Navigator.push(
+          context,
+          // We'll create the SelectionScreen in the next step!
+          MaterialPageRoute(builder: (context) => AccountChangeWhatIDo()),
+        );
+        if (result != null && result.toString().isNotEmpty) {
+          setState(() {
+            _doStatus = result;
+          });
+        }
+      },
+      child: new ListTile(
+        title: new Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            new Text("What i do",
+                style: new TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.black)),
+            Icon(
+              Icons.edit,
+              color: Colors.blue,
+            )
+          ],
+        ),
+        subtitle: new Container(
+          padding: const EdgeInsets.only(top: 2.0),
+          child: new Text(_doStatus,
+              style: new TextStyle(color: Colors.black, fontSize: 12.0)),
+        ),
+      ),
+    );
+  }
+
+  Widget _userDetailLocation() {
+    return GestureDetector(
+      onTap: () async {
+        final result = await Navigator.push(
+          context,
+          // We'll create the SelectionScreen in the next step!
+          MaterialPageRoute(builder: (context) => AccountChangeLocation()),
+        );
+        if (result != null && result.toString().isNotEmpty) {
+          setState(() {
+            _myLocation = result;
+          });
+        }
+      },
+      child: new ListTile(
+        title: new Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            new Text("Location",
+                style: new TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.black)),
+            Icon(
+              Icons.edit,
+              color: Colors.blue,
+            )
+          ],
+        ),
+        subtitle: new Container(
+          padding: const EdgeInsets.only(top: 2.0),
+          child: new Text(_myLocation,
+              style: new TextStyle(color: Colors.black, fontSize: 12.0)),
+        ),
+      ),
+    );
+  }
+
+  Widget _userDetailStatus() {
+    return GestureDetector(
+      onTap: () async {
+        final result = await Navigator.push(
+          context,
+          // We'll create the SelectionScreen in the next step!
+          MaterialPageRoute(builder: (context) => AccountChangeStatus()),
+        );
+        if (result != null && result.toString().isNotEmpty) {
+          setState(() {
+            _myStatus = result;
+          });
+        }
+      },
+      child: new ListTile(
+        title: new Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            new Text("Status",
+                style: new TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.black)),
+            Icon(
+              Icons.edit,
+              color: Colors.blue,
+            )
+          ],
+        ),
+        subtitle: new Container(
+          padding: const EdgeInsets.only(top: 2.0),
+          child: new Text(_myStatus,
+              style: new TextStyle(color: Colors.black, fontSize: 12.0)),
+        ),
+      ),
+    );
+  }
+
+  Widget _userDetailName() {
+    return GestureDetector(
+      onTap: () async {
+        final result = await Navigator.push(
+          context,
+          // We'll create the SelectionScreen in the next step!
+          MaterialPageRoute(builder: (context) => AccountChangeName()),
+        );
+        if (result != null && result.toString().isNotEmpty) {
+          setState(() {
+            _myName = result;
+          });
+        }
+      },
+      child: new ListTile(
+        title: new Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            new Text("Name",
+                style: new TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.black)),
+            Icon(
+              Icons.edit,
+              color: Colors.blue,
+            )
+          ],
+        ),
+        subtitle: new Container(
+          padding: const EdgeInsets.only(top: 2.0),
+          child: new Text(_myName,
+              style: new TextStyle(color: Colors.black, fontSize: 12.0)),
+        ),
+      ),
+    );
+  }
+
   Widget _userdetails() {
     return Container(
       padding: EdgeInsets.only(left: 30.0, right: 30.0),
       child: Column(
         children: <Widget>[
-          GestureDetector(
-            onTap: () async {
-              final result = await Navigator.push(
-                context,
-                // We'll create the SelectionScreen in the next step!
-                MaterialPageRoute(builder: (context) => AccountChangeName()),
-              );
-              if (_myName != null && _myName.toString().isNotEmpty) {
-                setState(() {
-                  _myName = result;
-                });
-              }
-            },
-            child: new ListTile(
-              title: new Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  new Text("Name",
-                      style: new TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black)),
-                  Icon(
-                    Icons.edit,
-                    color: Colors.blue,
-                  )
-                ],
-              ),
-              subtitle: new Container(
-                padding: const EdgeInsets.only(top: 2.0),
-                child: new Text(_myName,
-                    style: new TextStyle(color: Colors.black, fontSize: 12.0)),
-              ),
-            ),
-          ),
+          _userDetailName(),
           _divider(),
-          GestureDetector(
-            onTap: () async {
-              final result = await Navigator.push(
-                context,
-                // We'll create the SelectionScreen in the next step!
-                MaterialPageRoute(builder: (context) => AccountChangeStatus()),
-              );
-              if (_myStatus != null && _myStatus.toString().isNotEmpty) {
-                setState(() {
-                  _myStatus = result;
-                });
-              }
-            },
-            child: new ListTile(
-              title: new Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  new Text("Status",
-                      style: new TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black)),
-                  Icon(
-                    Icons.edit,
-                    color: Colors.blue,
-                  )
-                ],
-              ),
-              subtitle: new Container(
-                padding: const EdgeInsets.only(top: 2.0),
-                child: new Text(_myStatus,
-                    style: new TextStyle(color: Colors.black, fontSize: 12.0)),
-              ),
-            ),
-          ),
+          _userDetailStatus(),
           _divider(),
-          GestureDetector(
-            onTap: () async {
-              final result = await Navigator.push(
-                context,
-                // We'll create the SelectionScreen in the next step!
-                MaterialPageRoute(
-                    builder: (context) => AccountChangeLocation()),
-              );
-              if (_myLocation != null && _myLocation.toString().isNotEmpty) {
-                setState(() {
-                  _myLocation = result;
-                });
-              }
-            },
-            child: new ListTile(
-              title: new Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  new Text("Location",
-                      style: new TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black)),
-                  Icon(
-                    Icons.edit,
-                    color: Colors.blue,
-                  )
-                ],
-              ),
-              subtitle: new Container(
-                padding: const EdgeInsets.only(top: 2.0),
-                child: new Text(_myLocation,
-                    style: new TextStyle(color: Colors.black, fontSize: 12.0)),
-              ),
-            ),
-          ),
+          _userDetailLocation(),
           _divider(),
-          GestureDetector(
-            onTap: () async {
-              final result = await Navigator.push(
-                context,
-                // We'll create the SelectionScreen in the next step!
-                MaterialPageRoute(builder: (context) => AccountChangeWhatIDo()),
-              );
-              if (_doStatus != null && _doStatus.toString().isNotEmpty) {
-                setState(() {
-                  _doStatus = result;
-                });
-              }
-            },
-            child: new ListTile(
-              title: new Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  new Text("What i do",
-                      style: new TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black)),
-                  Icon(
-                    Icons.edit,
-                    color: Colors.blue,
-                  )
-                ],
-              ),
-              subtitle: new Container(
-                padding: const EdgeInsets.only(top: 2.0),
-                child: new Text(_doStatus,
-                    style: new TextStyle(color: Colors.black, fontSize: 12.0)),
-              ),
-            ),
-          ),
+          _userDetailWhatIDo(),
           _divider(),
-          GestureDetector(
-            onTap: () async {
-              final result = await Navigator.push(
-                context,
-                // We'll create the SelectionScreen in the next step!
-                MaterialPageRoute(builder: (context) => AccountChangeNumber()),
-              );
-
-              if (result != null && result.toString().isNotEmpty) {
-                setState(() {
-                  _myphoneNumber = result;
-                });
-              }
-            },
-            child: new ListTile(
-              title: new Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  new Text("Phone number",
-                      style: new TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black)),
-                  Icon(
-                    Icons.edit,
-                    color: Colors.blue,
-                  )
-                ],
-              ),
-              subtitle: new Container(
-                padding: const EdgeInsets.only(top: 2.0),
-                child: new Text(_myphoneNumber,
-                    style: new TextStyle(color: Colors.black, fontSize: 12.0)),
-              ),
-            ),
-          ),
-          _divider(),
-          GestureDetector(
-            onTap: () async {
-              final result = await Navigator.push(
-                context,
-                // We'll create the SelectionScreen in the next step!
-                MaterialPageRoute(builder: (context) => AccountChangeEmail()),
-              );
-              if (result != null && result.toString().isNotEmpty) {
-                setState(() {
-                  _myEmail = result;
-                });
-              }
-            },
-            child: new ListTile(
-              title: new Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  new Text("Email",
-                      style: new TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black)),
-                  Icon(
-                    Icons.edit,
-                    color: Colors.blue,
-                  )
-                ],
-              ),
-              subtitle: new Container(
-                padding: const EdgeInsets.only(top: 2.0),
-                child: new Text(_myEmail,
-                    style: new TextStyle(color: Colors.black, fontSize: 12.0)),
-              ),
-            ),
-          ),
-          _divider(),
-          GestureDetector(
-            onTap: () async {
-              String res = await showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return SimpleDialog(
-                      title: const Text('Gender Preferences'),
-                      children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.all(5.0),
-                          padding: EdgeInsets.all(5.0),
-                          child: Column(
-                            children: <Widget>[
-                              SizedBox(
-                                width: 20.0,
-                              ),
-                              SimpleDialogOption(
-                                onPressed: () {
-                                  Navigator.pop(context, "Male");
-                                },
-                                child: Container(
-                                    height: 30.0,
-                                    child: Center(child: Text("Male"))),
-                              ),
-                              _divider(),
-                              SimpleDialogOption(
-                                onPressed: () {
-                                  Navigator.pop(context, "Female");
-                                },
-                                child: Container(
-                                    height: 30.0,
-                                    child: Center(child: Text("Female"))),
-                              ),
-                              _divider(),
-                              SimpleDialogOption(
-                                onPressed: () {
-                                  Navigator.pop(context, "Other");
-                                },
-                                child: Container(
-                                    height: 30.0,
-                                    child: Center(child: Text("Other"))),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    );
-                  });
-
-              print("result discover preference dialogue $res");
-              if (_myGender != null && _myGender.toString().isNotEmpty) {
-                setState(() {
-                  _myGender = res;
-                });
-              }
-            },
-            child: new ListTile(
-              title: new Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  new Text("Gender",
-                      style: new TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black)),
-                  Icon(
-                    Icons.edit,
-                    color: Colors.blue,
-                  )
-                ],
-              ),
-              subtitle: new Container(
-                padding: const EdgeInsets.only(top: 2.0),
-                child: new Text(_myGender,
-                    style: new TextStyle(color: Colors.black, fontSize: 12.0)),
-              ),
-            ),
-          ),
+          // _userDetailPhoneNumber(),
+          // _divider(),
+          // _userDetailEmail(),
+          // _divider(),
+          _userDetailGender(),
         ],
       ),
     );
@@ -435,13 +462,7 @@ class _UserAccountState extends State<UserAccount> {
 
   File _image;
 
-  Future getImage() async {
-    //  var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-
-    setState(() {
-      //   _image = image;
-    });
-  }
+  String _imagePath;
 
   Widget _defaultImage() {
     return Image.asset(
@@ -453,6 +474,7 @@ class _UserAccountState extends State<UserAccount> {
   }
 
   Widget _userSelectImage() {
+    _image = new File(_imagePath);
     return Image.file(
       _image,
       fit: BoxFit.cover,
@@ -485,12 +507,11 @@ class _UserAccountState extends State<UserAccount> {
                       height: 200.0,
                       child: GestureDetector(
                         onDoubleTap: () {
-                          getImage();
                           print("Double tap image");
                         },
                         child: Stack(
                           children: <Widget>[
-                            _image == null
+                            _imagePath == null || _imagePath.isEmpty
                                 ? _defaultImage()
                                 : _userSelectImage(),
                             Align(
@@ -502,9 +523,22 @@ class _UserAccountState extends State<UserAccount> {
                                   size: 26.0,
                                   color: Colors.black87,
                                 ),
-                                onPressed: () {
+                                onPressed: () async {
                                   print("get image");
-                                  getImage();
+
+                                  var res = await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => PicturesScreen(
+                                            intent: 1,
+                                          ),
+                                    ),
+                                  );
+
+                                  print("\n\n $res == get image \n\n");
+                                  setState(() {
+                                    _imagePath = res;
+                                  });
                                 },
                               ),
                             )

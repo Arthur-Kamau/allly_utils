@@ -5,6 +5,14 @@ import 'package:flutter/services.dart';
 import 'package:path/path.dart' as path;
 
 class AppsScreen extends StatefulWidget {
+
+   String userChatName;
+  String userChatPhoneNumber;
+  String userChatMessage;
+
+  AppsScreen(
+      {@required this.userChatName, @required this.userChatPhoneNumber,@required this.userChatMessage});
+
   @override
   AppsScreenState createState() {
     return new AppsScreenState();

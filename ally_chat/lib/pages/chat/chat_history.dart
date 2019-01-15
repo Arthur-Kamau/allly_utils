@@ -193,16 +193,20 @@ class _ChatHistoryState extends State<ChatHistory>
       floatingActionButton: FloatingActionButton(
         tooltip: "messages",
         backgroundColor: Colors.blue,
-        onPressed: () {
+        onPressed: () async {
           //Navigator.pushNamed(context, ContactsSelectOne.tag);
-           Navigator.push(
+          print("select comtact");
+        await Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => ContactsSelectOne(
-                         
+                         intent: 1,
                         ),
                   ),
                 );
+       
+
+                
         },
         child: Icon(Icons.message),
       ),

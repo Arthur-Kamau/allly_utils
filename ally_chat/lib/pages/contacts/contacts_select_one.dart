@@ -1,11 +1,18 @@
 import 'package:ally_chat/core/user.dart';
+import 'package:ally_chat/pages/chat/chat_history.dart';
 import 'package:ally_chat/pages/person/person_chat_view.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter/services.dart';
 
+//intent one ->chat history
+//        two ->chat item
+
 class ContactsSelectOne extends StatefulWidget {
   static String tag = 'contacts-select-one-page';
+  int intent;
+  ContactsSelectOne({@required this.intent});
+
   @override
   ContactsSelectOneState createState() {
     return new ContactsSelectOneState();
@@ -47,18 +54,27 @@ class ContactsSelectOneState extends State<ContactsSelectOne> {
               title: new Text("$key"),
               subtitle: new Text("${values[key]}"),
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => P2PChatView(
-                          chatId: "${User.phoneNumber}-${values[key]}",
-                          senderId: User.userId,
-                          recepientId: values[key],
-                          senderPhoneNumber: User.phoneNumber,
-                          recepientPhoneNumber: values[key],
-                        ),
-                  ),
-                );
+                print("pop item contact");
+                //Navigator.pop(context);//[key,values[key]]);
+                switch (widget.intent) {
+                  case 1:
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => P2PChatView(
+                              chatId: "${User.phoneNumber}-${values[key]}",
+                              senderId: User.userId,
+                              recepientId: values[key],
+                              senderPhoneNumber: User.phoneNumber,
+                              recepientPhoneNumber: values[key],
+                            ),
+                      ),
+                    );
+                    break;
+                  default:
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => ChatHistory()));
+                }
               },
             ),
             new Divider(
@@ -94,6 +110,10 @@ class ContactsSelectOneState extends State<ContactsSelectOne> {
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: Scaffold(appBar: AppBar(title: Text("Contacts"),), body: _showAppropriatewidget()));
+        home: Scaffold(
+            appBar: AppBar(
+              title: Text("Contacts"),
+            ),
+            body: _showAppropriatewidget()));
   }
 }

@@ -127,7 +127,7 @@ List<Color> colors = [
     );
   }
 
-  Widget chats(BuildContext context) {
+  Widget interestList(BuildContext context) {
     return new ListView.builder(
       itemCount: dummyContacts.length,
       itemBuilder: (context, i) => new Column(
@@ -173,7 +173,7 @@ List<Color> colors = [
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: appBar(context),
-      body: chats(context),
+      body: interestList(context),
     );
   }
 }
