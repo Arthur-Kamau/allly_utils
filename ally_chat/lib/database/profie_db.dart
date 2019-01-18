@@ -4,9 +4,9 @@ class UserProfile{
 
 void insertInititialValue(
   Database db,String name,
-  String what_i_do,String user_image_local,String user_image_url,
-  String user_gender,String user_location,String user_phone_number,
-  String user_status,String user_interest,String user_email
+  String whatIDo,String userImageLocal,String userImageUrl,
+  String userGender,String userLocation,String userPhoneNumber,
+  String userStatus,String userInterest,String userEmail
   ) async{
 
 
@@ -33,10 +33,10 @@ void insertInititialValue(
 
         )
       VALUES (
-       $name,$user_phone_number,$user_status,
-  $what_i_do,$user_image_url,$user_image_local,
-  $user_gender,$user_location,
-  $user_interest,$user_email
+       $name,$userPhoneNumber,$userStatus,
+  $whatIDo,$userImageUrl,$userImageLocal,
+  $userGender,$userLocation,
+  $userInterest,$userEmail
     """;
 
     await db.transaction((transaction) async {
@@ -48,6 +48,7 @@ void insertInititialValue(
 
   void updateProperty(String property,String newValue, Database db) async {
     
+
     String query = """"
         UPDATE  user_profile
         SET  $property = $newValue

@@ -5,7 +5,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 
-class ChatMetaData {
+class AuthData {
   static Database _db;
 
   Future<Database> get db async {
@@ -17,7 +17,7 @@ class ChatMetaData {
   //Creating a database with name test.dn in your directory
   initDb() async {
     io.Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, "meta.db");
+    String path = join(documentsDirectory.path, "data.db");
     var theDb = await openDatabase(path, version: 1, onCreate: _onCreate);
     return theDb;
   }

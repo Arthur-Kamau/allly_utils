@@ -9,12 +9,29 @@ import 'package:ally_chat/pages/attach_items/apps_screen.dart';
 
 class AttachItems extends StatefulWidget {
   static String tag = 'attch-items-page';
-  String userChatName;
-  String userChatPhoneNumber;
-  String userChatMessage;
+  // String userChatName;
+  // String userChatPhoneNumber;
+  // String userChatMessage;
+  int intent;
+
+  String chatId;
+  String senderId;
+  String senderPhoneNumber;
+  String recepientId;
+  String recepientPhoneNumber;
+
+  String groupId;
+  String groupName;
 
   AttachItems(
-      {this.userChatName, this.userChatPhoneNumber, this.userChatMessage});
+      {@required this.intent,
+      @required this.chatId,
+      @required this.senderId,
+      @required this.senderPhoneNumber,
+      @required this.recepientId,
+      @required this.recepientPhoneNumber,
+      @required this.groupId,
+      @required this.groupName});
 
   _AttachItemsState createState() => _AttachItemsState();
 }
@@ -97,30 +114,59 @@ class _AttachItemsState extends State<AttachItems>
           controller: _tabController,
           children: <Widget>[
             new CameraScreen(
-                userChatName: widget.userChatMessage,
-                userChatPhoneNumber: widget.userChatPhoneNumber,
-                userChatMessage: widget.userChatMessage),
+                intent: widget.intent,
+                chatId: widget.chatId,
+                senderId: widget.senderId,
+                senderPhoneNumber: widget.senderPhoneNumber,
+                recepientId: widget.recepientId,
+                recepientPhoneNumber: widget.recepientPhoneNumber,
+                groupId: widget.groupId,
+                groupName: widget.groupName),
             new ContactsScreen(
-                userChatName: widget.userChatMessage,
-                userChatPhoneNumber: widget.userChatPhoneNumber,
-                userChatMessage: widget.userChatMessage),
+                intent: widget.intent,
+                chatId: widget.chatId,
+                senderId: widget.senderId,
+                senderPhoneNumber: widget.senderPhoneNumber,
+                recepientId: widget.recepientId,
+                recepientPhoneNumber: widget.recepientPhoneNumber,
+                groupId: widget.groupId,
+                groupName: widget.groupName),
             new PicturesScreen(
-              intent: Intent.picturesScreenChatIntent,
-                userChatName: widget.userChatMessage,
-                userChatPhoneNumber: widget.userChatPhoneNumber,
-                userChatMessage: widget.userChatMessage),
+                intent: widget.intent,
+                chatId: widget.chatId,
+                senderId: widget.senderId,
+                senderPhoneNumber: widget.senderPhoneNumber,
+                recepientId: widget.recepientId,
+                recepientPhoneNumber: widget.recepientPhoneNumber,
+                groupId: widget.groupId,
+                groupName: widget.groupName),
             new MusicScreen(
-                userChatName: widget.userChatMessage,
-                userChatPhoneNumber: widget.userChatPhoneNumber,
-                userChatMessage: widget.userChatMessage),
+                intent: widget.intent,
+                chatId: widget.chatId,
+                senderId: widget.senderId,
+                senderPhoneNumber: widget.senderPhoneNumber,
+                recepientId: widget.recepientId,
+                recepientPhoneNumber: widget.recepientPhoneNumber,
+                groupId: widget.groupId,
+                groupName: widget.groupName),
             new VideoScreen(
-                userChatName: widget.userChatMessage,
-                userChatPhoneNumber: widget.userChatPhoneNumber,
-                userChatMessage: widget.userChatMessage),
+                intent: widget.intent,
+                chatId: widget.chatId,
+                senderId: widget.senderId,
+                senderPhoneNumber: widget.senderPhoneNumber,
+                recepientId: widget.recepientId,
+                recepientPhoneNumber: widget.recepientPhoneNumber,
+                groupId: widget.groupId,
+                groupName: widget.groupName),
             new AppsScreen(
-                userChatName: widget.userChatMessage,
-                userChatPhoneNumber: widget.userChatPhoneNumber,
-                userChatMessage: widget.userChatMessage),
+                intent: widget.intent,
+                chatId: widget.chatId,
+                senderId: widget.senderId,
+                senderPhoneNumber: widget.senderPhoneNumber,
+                recepientId: widget.recepientId,
+                recepientPhoneNumber: widget.recepientPhoneNumber,
+                groupId: widget.groupId,
+                groupName: widget.groupName),
           ],
         ),
       ),

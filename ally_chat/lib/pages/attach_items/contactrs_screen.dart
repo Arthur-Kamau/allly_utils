@@ -1,16 +1,31 @@
+import 'package:ally_chat/core/intent.dart';
+import 'package:ally_chat/pages/group/groups_chat_view.dart';
+import 'package:ally_chat/pages/person/person_chat_view.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter/services.dart';
 
 class ContactsScreen extends StatefulWidget {
-  
-  String userChatName;
-  String userChatPhoneNumber;
-  String userChatMessage;
+   int intent;
+
+  String chatId;
+  String senderId;
+  String senderPhoneNumber;
+  String recepientId;
+  String recepientPhoneNumber;
+
+  String groupId;
+  String groupName;
 
   ContactsScreen(
-      {this.userChatName, this.userChatPhoneNumber, this.userChatMessage});
-
+      {@required this.intent,
+      @required this.chatId,
+      @required this.senderId,
+      @required this.senderPhoneNumber,
+      @required this.recepientId,
+      @required this.recepientPhoneNumber,
+      @required this.groupId,
+      @required this.groupName});
 
   @override
   ContactsScreenState createState() {
@@ -52,6 +67,31 @@ class ContactsScreenState extends State<ContactsScreen> {
             new ListTile(
               title: new Text("$key"),
               subtitle: new Text("${values[key]}"),
+              onTap: (){
+                  if (widget.intent == Intent.appsScreenChatIntent) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => P2PChatView(
+                              chatId: widget.groupId,
+                              senderId: widget.senderId,
+                              recepientId: widget.recepientId,
+                              senderPhoneNumber: widget.senderPhoneNumber,
+                              recepientPhoneNumber: widget.recepientPhoneNumber,
+                            ),
+                      ));
+                } else {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => P2GChatView(
+                              //  chatId: chatHistory.chatId,
+                              groupId: widget.groupId,
+                              groupName: widget.groupName,
+                            ),
+                      ));
+                }
+              },
             ),
             new Divider(
               height: 2.0,

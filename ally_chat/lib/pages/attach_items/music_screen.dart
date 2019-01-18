@@ -1,15 +1,32 @@
+import 'package:ally_chat/core/intent.dart';
+import 'package:ally_chat/pages/group/groups_chat_view.dart';
+import 'package:ally_chat/pages/person/person_chat_view.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart' as path;
 
 class MusicScreen extends StatefulWidget {
-  String userChatName;
-  String userChatPhoneNumber;
-  String userChatMessage;
+  int intent;
+
+  String chatId;
+  String senderId;
+  String senderPhoneNumber;
+  String recepientId;
+  String recepientPhoneNumber;
+
+  String groupId;
+  String groupName;
 
   MusicScreen(
-      {this.userChatName, this.userChatPhoneNumber, this.userChatMessage});
+      {@required this.intent,
+      @required this.chatId,
+      @required this.senderId,
+      @required this.senderPhoneNumber,
+      @required this.recepientId,
+      @required this.recepientPhoneNumber,
+      @required this.groupId,
+      @required this.groupName});
 
   @override
   MusicScreenState createState() {
@@ -48,17 +65,47 @@ class MusicScreenState extends State<MusicScreen> {
         return new Column(
           children: <Widget>[
             new ListTile(
-              title: new Text(
-                path.basenameWithoutExtension(
-                  '${values[index]}',
+                title: new Text(
+                  path.basenameWithoutExtension(
+                    '${values[index]}',
+                  ),
+                  style: TextStyle(fontSize: 13.0),
                 ),
-                style: TextStyle(fontSize: 13.0),
-              ),
-              // subtitle: new Text(
-              //   "${values[index]}",
-              //   style: TextStyle(fontSize: 10.0, color: Colors.white30),
-              // ),
-            ),
+                onTap: () {
+                  print("tap audio");
+
+                  if (widget.intent == Intent.musicScreenChatIntent) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => P2PChatView(
+                                chatId: widget.groupId,
+                                senderId: widget.senderId,
+                                recepientId: widget.recepientId,
+                                senderPhoneNumber: widget.senderPhoneNumber,
+                                recepientPhoneNumber:
+                                    widget.recepientPhoneNumber,
+                              ),
+                        ));
+                  } else {
+                   
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => P2GChatView(
+                                  //  chatId: chatHistory.chatId,
+                                  groupId: widget.groupId,
+                                  groupName: widget.groupName,
+                                ),
+                          ));
+                    
+                  }
+                }
+                // subtitle: new Text(
+                //   "${values[index]}",
+                //   style: TextStyle(fontSize: 10.0, color: Colors.white30),
+                // ),
+                ),
             new Divider(
               height: 2.0,
             ),

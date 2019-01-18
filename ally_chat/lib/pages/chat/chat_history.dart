@@ -6,6 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:ally_chat/model/operations_models/contact_model.dart';
 import 'package:ally_chat/pages/group/groups_chat_view.dart';
 import 'package:ally_chat/pages/bottom_modal/main_bottom_modal.dart';
+import 'package:connectivity/connectivity.dart';
+import 'dart:async';
+import 'package:flutter/services.dart'; 
+
 class ChatHistory extends StatefulWidget {
   static String tag = 'chat-history-page';
   _ChatHistoryState createState() => _ChatHistoryState();
@@ -13,15 +17,44 @@ class ChatHistory extends StatefulWidget {
 
 class _ChatHistoryState extends State<ChatHistory>
     with SingleTickerProviderStateMixin {
+
+      String _connectionStatus = 'Unknown';
+  final Connectivity _connectivity = Connectivity();
+  StreamSubscription<ConnectivityResult> _connectivitySubscription;
+
   Widget appBar(BuildContext context) {
     return new AppBar(
-
-        leading: IconButton(
-          icon: Icon(Icons.menu),
-          onPressed: (){
-           //  MainBottomModal(context: context).MainBottomModalDialog();
-           MainBottomModal(context: context).MainBottomModalDialog();
-          },
+        leading: Stack(
+          children: <Widget>[
+            Container(
+             margin: EdgeInsets.only(left: 3.0,top: 4.0),
+             height: 40.0,
+             width: 40.0,
+             child: IconButton(
+                
+                icon: Icon(Icons.menu,size: 28.0,),
+                onPressed: () {
+                  //  MainBottomModal(context: context).MainBottomModalDialog();
+                  MainBottomModal(context: context).MainBottomModalDialog();
+                },
+              ),
+            ),
+            // new Positioned(
+            //     // draw a red marble
+            //     top: 6.0,
+            //     right: 5.0,
+            //     child: Container(
+            //       padding: EdgeInsets.all(3.0),
+            //       child: Text(
+            //        "",// " 2 ",
+            //         style: TextStyle(color: Colors.white, fontSize: 8.0),
+            //       ),
+            //       decoration: BoxDecoration(
+            //         borderRadius: BorderRadius.circular(30.0),
+            //         color: Colors.red,
+            //       ),
+            //     ))
+          ],
         ),
         backgroundColor: Colors.blue,
         title: new Text("Chats"),
@@ -148,10 +181,45 @@ class _ChatHistoryState extends State<ChatHistory>
 
   List<ChatHistoryModel> chatData;
 
+
+@override
   void initState() {
     super.initState();
     //get messages
+    initConnectivity();
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
+      setState(() => _connectionStatus = result.toString());
+    });
+  }
 
+  @override
+  void dispose() {
+    _connectivitySubscription.cancel();
+    super.dispose();
+  }
+
+   // Platform messages are asynchronous, so we initialize in an async method.
+  Future<Null> initConnectivity() async {
+    String connectionStatus;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      connectionStatus = (await _connectivity.checkConnectivity()).toString();
+    } on PlatformException catch (e) {
+      print(e.toString());
+      connectionStatus = 'Failed to get connectivity.';
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) {
+      return;
+    }
+
+    setState(() {
+      _connectionStatus = connectionStatus;
+    });
   }
 
   Widget _messages() {
@@ -171,7 +239,7 @@ class _ChatHistoryState extends State<ChatHistory>
       );
     } else {
       return Center(
-              child: Container(
+        child: Container(
           child: Text("No recent chats"),
         ),
       );
@@ -196,17 +264,14 @@ class _ChatHistoryState extends State<ChatHistory>
         onPressed: () async {
           //Navigator.pushNamed(context, ContactsSelectOne.tag);
           print("select comtact");
-        await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ContactsSelectOne(
-                         intent: 1,
-                        ),
+          await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ContactsSelectOne(
+                    intent: 1,
                   ),
-                );
-       
-
-                
+            ),
+          );
         },
         child: Icon(Icons.message),
       ),

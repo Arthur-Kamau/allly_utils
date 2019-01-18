@@ -2,7 +2,7 @@ import 'package:ally_chat/pages/settings/account/account.dart';
 import 'package:flutter/material.dart';
 
 class AccountChangeName extends StatefulWidget {
-   static String tag = 'user-account-change-name-page';
+  static String tag = 'user-account-change-name-page';
 
   @override
   AccountChangeNameState createState() {
@@ -12,7 +12,7 @@ class AccountChangeName extends StatefulWidget {
 
 class AccountChangeNameState extends State<AccountChangeName> {
   final _formKey = GlobalKey<FormState>();
-TextEditingController textFieldController = TextEditingController();
+  TextEditingController textFieldController = TextEditingController();
 
   String _name, _phonenumber;
 
@@ -20,30 +20,23 @@ TextEditingController textFieldController = TextEditingController();
 
   Color _eyeButtonColor = Colors.grey;
 
-  
-  Widget _instructionNewPhoneEmailText(){
+  Widget _instructionNewPhoneEmailText() {
     return Container(
       margin: EdgeInsets.only(top: 10.0),
-       width: MediaQuery.of(context).size.width ,
-       height: 20.0,
+      width: MediaQuery.of(context).size.width,
+      height: 20.0,
       child: Text(
         "Change you name",
-        style: TextStyle(
-          color: Colors.black
-        ),
+        style: TextStyle(color: Colors.black),
       ),
     );
   }
 
-  
-
-  
-
-   Widget buildEmailTextField() {
+  Widget buildEmailTextField() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
-        height:60.0 ,
+        height: 60.0,
         width: 200.0,
         child: TextFormField(
           controller: textFieldController,
@@ -54,26 +47,22 @@ TextEditingController textFieldController = TextEditingController();
               return 'Public Name';
             }
           },
-          decoration: InputDecoration(
-            labelText: 'Public name'
-          ),
+          decoration: InputDecoration(labelText: 'Public name'),
         ),
       ),
     );
   }
 
- 
-Widget _newEmail(){
-  return Row(
-    children: <Widget>[
-   
-       SizedBox(width: 10.0),
-     buildEmailTextField(),
-    ],
-  );
-}
+  Widget _newEmail() {
+    return Row(
+      children: <Widget>[
+        SizedBox(width: 10.0),
+        buildEmailTextField(),
+      ],
+    );
+  }
 
-   Align _buildSubmitButton(BuildContext context) {
+  Align _buildSubmitButton(BuildContext context) {
     return Align(
       child: Container(
         margin: EdgeInsets.only(top: 20.0),
@@ -86,54 +75,55 @@ Widget _newEmail(){
                 //Only gets here if the fields pass
                 _formKey.currentState.save();
                 //TODO Check values and navigate to new page
-                
-                   Navigator.pop(context, textFieldController.text == null ? "name" :textFieldController.text  );
+
+                Navigator.pop(
+                    context,
+                    textFieldController.text == null
+                        ? "name"
+                        : textFieldController.text);
               }
             },
             color: Colors.blue,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
-            child: Text('Change name', style: Theme
-              .of(context)
-              .primaryTextTheme
-              .button,),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0)),
+            child: Text(
+              'Change name',
+              style: Theme.of(context).primaryTextTheme.button,
+            ),
           ),
         ),
       ),
     );
-   }
+  }
 
-Widget accountAvatar(){
-  return Padding(
-    padding: const EdgeInsets.all(5.0),
-    child: CircleAvatar(
-                              minRadius: 18.0,
-                              maxRadius: 20.0,
-                              backgroundImage: new AssetImage('assets/images/avatar.jpg'),
-                            ),
-  );
-}
+  Widget accountAvatar() {
+    return Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: CircleAvatar(
+        minRadius: 18.0,
+        maxRadius: 20.0,
+        backgroundImage: new AssetImage('assets/images/avatar.jpg'),
+      ),
+    );
+  }
 
-
-@override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: new AppBar(
-         // leading: accountAvatar(),
-         backgroundColor: Colors.blue,
-          title: new Text("Change Name"),
-          actions: <Widget>[
-            
-          ],
-        ),
+      appBar: new AppBar(
+        // leading: accountAvatar(),
+        backgroundColor: Colors.blue,
+        title: new Text("Change Name"),
+        actions: <Widget>[],
+      ),
       body: Form(
         key: _formKey,
         child: ListView(
           padding: const EdgeInsets.fromLTRB(22.0, 0.0, 22.0, 22.0),
           children: <Widget>[
             SizedBox(height: kToolbarHeight),
-            
             _instructionNewPhoneEmailText(),
-             _newEmail(),
+            _newEmail(),
             _buildSubmitButton(context)
           ],
         ),

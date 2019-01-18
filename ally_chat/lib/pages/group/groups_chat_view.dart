@@ -624,7 +624,15 @@ class _P2GChatViewState extends State<P2GChatView>
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => AttachItems(),
+                        builder: (context) => AttachItems(
+                            intent: 3,
+                            chatId: "",
+                            senderId: "",
+                            senderPhoneNumber: "",
+                            recepientId: "",
+                            recepientPhoneNumber: "",
+                            groupId: widget.groupId,
+                            groupName: widget.groupName),
                       ),
                     );
                   },

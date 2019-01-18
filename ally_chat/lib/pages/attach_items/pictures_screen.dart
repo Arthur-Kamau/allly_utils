@@ -1,3 +1,6 @@
+import 'package:ally_chat/core/intent.dart';
+import 'package:ally_chat/pages/group/groups_chat_view.dart';
+import 'package:ally_chat/pages/person/person_chat_view.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter/services.dart';
@@ -6,13 +9,26 @@ import 'package:path/path.dart' as path;
 //inent 1 --> settings profile attach image
 //intent 2 -->chat
 class PicturesScreen extends StatefulWidget {
+  int intent;
 
-int intent;
- String userChatName;
-  String userChatPhoneNumber;
-  String userChatMessage;
+  String chatId;
+  String senderId;
+  String senderPhoneNumber;
+  String recepientId;
+  String recepientPhoneNumber;
 
-  PicturesScreen({this.intent,this.userChatName, this.userChatPhoneNumber, this.userChatMessage});
+  String groupId;
+  String groupName;
+
+  PicturesScreen(
+      {@required this.intent,
+      @required this.chatId,
+      @required this.senderId,
+      @required this.senderPhoneNumber,
+      @required this.recepientId,
+      @required this.recepientPhoneNumber,
+      @required this.groupId,
+      @required this.groupName});
   @override
   PicturesScreenState createState() {
     return new PicturesScreenState();
@@ -56,7 +72,29 @@ class PicturesScreenState extends State<PicturesScreen> {
                 style: TextStyle(fontSize: 13.0),
               ),
               onTap: () {
-                Navigator.pop(context, values[index]);
+                if (widget.intent == Intent.appsScreenChatIntent) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => P2PChatView(
+                              chatId: widget.groupId,
+                              senderId: widget.senderId,
+                              recepientId: widget.recepientId,
+                              senderPhoneNumber: widget.senderPhoneNumber,
+                              recepientPhoneNumber: widget.recepientPhoneNumber,
+                            ),
+                      ));
+                } else {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => P2GChatView(
+                              //  chatId: chatHistory.chatId,
+                              groupId: widget.groupId,
+                              groupName: widget.groupName,
+                            ),
+                      ));
+                }
               },
               onLongPress: () {},
             ),

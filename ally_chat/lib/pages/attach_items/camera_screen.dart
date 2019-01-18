@@ -5,16 +5,36 @@ import 'package:camera/camera.dart';
 List<CameraDescription> cameras;
 
 class CameraScreen extends StatelessWidget {
-   String userChatName;
-  String userChatPhoneNumber;
-  String userChatMessage;
+  int intent;
 
+  String chatId;
+  String senderId;
+  String senderPhoneNumber;
+  String recepientId;
+  String recepientPhoneNumber;
 
+  String groupId;
+  String groupName;
 
-  CameraScreen({String userChatName, String userChatPhoneNumber, String userChatMessage}) {
-    this.userChatName =userChatName ;
-    this.userChatPhoneNumber = userChatPhoneNumber; 
-    this.userChatMessage = userChatMessage;
+  CameraScreen(
+      {@required this.intent,
+      @required this.chatId,
+      @required this.senderId,
+      @required this.senderPhoneNumber,
+      @required this.recepientId,
+      @required this.recepientPhoneNumber,
+      @required this.groupId,
+      @required this.groupName}) {
+
+    this.intent = intent;
+    this.chatId = chatId;
+    this.senderId = senderId;
+     this.senderPhoneNumber = senderPhoneNumber;
+    this.recepientId = recepientId;
+    this.recepientPhoneNumber = recepientPhoneNumber;
+     this.groupId = groupId;
+    this.groupName = groupName;
+    
 
     getAvailableCameras();
   }
@@ -167,7 +187,10 @@ class _CameraViewState extends State<CameraView> {
                                               child: Container(
                                                 child: SwitchListTile(
                                                   title: Text(
-                                                      "Flashlight",style: TextStyle(fontSize: 12),),
+                                                    "Flashlight",
+                                                    style:
+                                                        TextStyle(fontSize: 12),
+                                                  ),
                                                   // subtitle:Text("on"),
                                                   value: true,
                                                   onChanged: (option) {},
@@ -177,15 +200,17 @@ class _CameraViewState extends State<CameraView> {
                                             _divider(),
                                             SimpleDialogOption(
                                               onPressed: () {
-                                                Navigator.pop(
-                                                    context, 1);
+                                                Navigator.pop(context, 1);
                                               },
                                               child: Container(
                                                   height: 30.0,
                                                   child: Center(
-                                                      child: Text("Camera item",style: TextStyle(fontSize: 12),))),
+                                                      child: Text(
+                                                    "Camera item",
+                                                    style:
+                                                        TextStyle(fontSize: 12),
+                                                  ))),
                                             ),
-                                           
                                           ],
                                         ),
                                       ),
