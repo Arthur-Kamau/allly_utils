@@ -1,4 +1,3 @@
-
 import 'package:ally_chat/model/operations_models/chat_model.dart';
 import 'package:ally_chat/model/operations_models/contact_model.dart';
 import 'package:path/path.dart';
@@ -11,9 +10,9 @@ class P2PDB {
 /**
  * get contacts
  */
-  Future<List<ChatP2PModel>> getp2pChats(Database db, String chatId) async {
+  Future<List<ChatP2PModel>> getp2pChats(Database db, String userId) async {
     String getContactsQuery =
-        "SELECT * FROM chat_p2p_table WHERE  ChatId=$chatId";
+        "SELECT * FROM chat_p2p_table "; //WHERE  RecepientId=$userId or SenderId=$userId ";
 
     List<Map> dbList = await db.rawQuery(getContactsQuery);
     List<ChatP2PModel> chats = new List();
@@ -49,8 +48,8 @@ class P2PDB {
     String query = """
       INSERT INTO chat_p2p_table (
 
-statusType,
-phoneNumber,
+    ChatStatusType,
+    phoneNumber,
 
 		ChatId ,
 		RecepientId  ,
@@ -61,13 +60,13 @@ phoneNumber,
 		ContentType ,
 		Content ,
 
- createdAt  ,
+    createdAt  ,
     updatedAt 
 
         )
       VALUES (
         ${achat.statusType},
-        ${achat.phoneNumber}
+        ${achat.senderphoneNumber},
         ${achat.chatId},
         ${achat.recepientId},
         ${achat.senderId},
@@ -75,9 +74,10 @@ phoneNumber,
           ${achat.messageStatus},
         ${achat.contentType},
 
-          ${achat.content}
-        ${achat.createTime},
-        ${achat.updateTime},
+          ${achat.content},
+         time1,
+        time2
+        )
     """;
 
     await db.transaction((transaction) async {

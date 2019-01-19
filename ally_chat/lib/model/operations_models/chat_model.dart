@@ -47,7 +47,7 @@ class ChatP2PModel {
   String recepientId;
   String senderId;
   String chatId;
-  String phoneNumber;
+  String senderphoneNumber;
   int statusType;
   int messageStatus;
   int contentType;
@@ -62,7 +62,7 @@ class ChatP2PModel {
       this.senderId,
       this.statusType,
       this.chatId,
-      this.phoneNumber,
+      this.senderphoneNumber,
       this.messageStatus,
       this.contentType,
       this.content,
@@ -75,7 +75,7 @@ class ChatP2PModel {
         senderId = json['sender_id'],
         statusType = json['status_type'],
         chatId = json['chat_id'],
-        phoneNumber = json['phone_number'],
+        senderphoneNumber = json['sender_phone_number'],
         messageStatus = json['message_status'],
         contentType = json['content_type'],
         createTime = json['create_at'],
@@ -87,7 +87,7 @@ class ChatP2PModel {
         'sender_id': senderId,
         'status_type': statusType,
         'chat_id': chatId,
-        'phone_number': phoneNumber,
+        'sender_phone_number': senderphoneNumber,
         'message_status': messageStatus,
         'content_type': contentType,
         'create_at': createTime,
@@ -247,7 +247,7 @@ List<ChatP2PModel> chattDataP2P = [
       recepientId: "",
       senderId: "",
       statusType: 0,
-      phoneNumber: "102993893",
+      senderphoneNumber: "102993893",
       chatId: "1234",
       messageStatus: 0,
       contentType: 0,
@@ -259,7 +259,7 @@ List<ChatP2PModel> chattDataP2P = [
       recepientId: "",
       senderId: "",
       statusType: 0,
-      phoneNumber: "102993893",
+     senderphoneNumber:  "102993893",
       chatId: "1234",
       messageStatus: 0,
       contentType: 1,

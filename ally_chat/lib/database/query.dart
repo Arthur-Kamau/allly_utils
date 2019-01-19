@@ -152,17 +152,20 @@ CREATE TABLE IF NOT EXISTS user_contacts_blocked (
 CREATE TABLE IF NOT EXISTS chat_p2p_table (
 		id serial PRIMARY KEY,
 
+ChatStatusType varchar(100),
+    phoneNumber varchar(100),
+
 		ChatId varchar(100),
 		RecepientId  varchar(100),
 		SenderId varchar(100),
 
-		ChatStatusType INTEGER,
-		MessageStatus  INTEGER,
-		ContentType INTEGER,
-		Content TEXT,
+		
+		MessageStatus  varchar(100),
+		ContentType varchar(100),
+		Content Text,
 
- createdAt TEXT ,
-    updatedAt TEXT
+    createdAt  varchar(100),
+    updatedAt varchar(100)
 
 
 	)""";

@@ -129,17 +129,30 @@ class _P2PChatViewState extends State<P2PChatView>
     return _conts;
   }
 
+
+ void  getChatsFromDb()async{
+    Database db = await AllyNativeDb().db();
+
+     P2PDB().getp2pChats(db, User.userId).then((chats){
+         for (var i = 0; i < chats.length; i++) {
+      print("a chat ${chats[i].senderphoneNumber}");
+      // if (chattData.person_to_person[i].chatId == widget.chatId) {
+      //   mychattData_.add(chattData.person_to_person[i]);
+      // }
+    }
+     });
+
+    
+  }
   void initState() {
-    //get all contacts
+    //get all chats from database
     // contactsData =  _getContacts();
+
+getChatsFromDb();
 
     super.initState();
 
-    for (var i = 0; i < chattData.person_to_person.length; i++) {
-      if (chattData.person_to_person[i].chatId == widget.chatId) {
-        mychattData_.add(chattData.person_to_person[i]);
-      }
-    }
+  
 
     //sort the list by creation time
 
@@ -293,7 +306,15 @@ class _P2PChatViewState extends State<P2PChatView>
                 // onPressed: () => onSendMessage(_textController.text, 0),
                 color: primaryColor,
                 onPressed:
-                    _isWritting ? () => _submitMsg(_textController.text) : null,
+                    _isWritting ? () { 
+                      //clear text field
+                      //insert into db
+                      //add to array
+                      //send message
+                      _submitMsg(_textController.text) ;
+                     
+                    }
+                      : null,
               ),
             ),
             color: Colors.white,
@@ -351,12 +372,13 @@ class _P2PChatViewState extends State<P2PChatView>
     ChatP2PModel newChatItem = new ChatP2PModel(
         //  id: 1,
 
-        recepientId: widget.senderId,
-        senderId: User.userId,
-        statusType: widget.statusSending,
-        chatId: widget.chatId,
-        messageStatus: widget.messageStatusOk,
-        contentType: widget.contentText,
+        recepientId:"one",// widget.senderId,
+        senderId:"two",// User.userId,
+        statusType:0,// widget.statusSending,
+        senderphoneNumber: "phone",// User.phoneNumber,
+        chatId: "five",//widget.chatId,
+        messageStatus: 2, //widget.messageStatusOk,
+        contentType: 3,//widget.contentText,
         content: txt,
         createTime: DateTime.now(),
         updateTime: DateTime.now());
@@ -367,6 +389,7 @@ class _P2PChatViewState extends State<P2PChatView>
     //       vsync: this, duration: new Duration(milliseconds: 800)),
     // );
 
+  //insert to array
     _myMessage(newChatItem, context);
     setState(() {
       mychattData.insert(0, newChatItem);
@@ -374,18 +397,12 @@ class _P2PChatViewState extends State<P2PChatView>
     // msg.animationController.forward();
 
     //send to server
-    print("online");
-    widget.channel.sink.add({
-      "name": "kamau",
-      "userId": "John",
-      "token": "25",
-      "userAgent": "techmo m7"
-    });
-    // Database con = await AllyNativeDb().db();
+    
+    Database con = await AllyNativeDb().db();
 
     //insert into database message item
     //(ChatP2PModel achat, Database db)
-    // P2PDB().addp2pChat(newChatItem, con);
+    P2PDB().addp2pChat(newChatItem, con);
   }
 
   @override
