@@ -1,5 +1,6 @@
 package com.araizen.com.allychat;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.pm.ApplicationInfo;
@@ -32,6 +33,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+
+import android.provider.ContactsContract;
+
+
 
 public class MainActivity extends FlutterActivity {
 
@@ -77,6 +82,7 @@ public class MainActivity extends FlutterActivity {
     });
 
   }
+
 
   private int getBatteryLevel() {
     int batteryLevel = -1;
