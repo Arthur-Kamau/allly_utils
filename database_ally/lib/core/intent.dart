@@ -1,4 +1,7 @@
 class Intent {
+  //intent 0  pop screen back
+  int intentZero() => 0;
+  static const int intentZeroAction = 0;
 //apps screen
   static int appsScreenChatIntent = 2;
   static int appsScreenGroupIntent = 3;
@@ -8,8 +11,8 @@ class Intent {
   static int cameraScreenGroupIntent = 3;
 
   //Contact screen
-  static int ContactScreenChatIntent = 2;
-  static int ContactScreenGroupIntent = 3;
+  static int contactScreenChatIntent = 2;
+  static int contactScreenGroupIntent = 3;
 
   //music screen
   static int musicScreenChatIntent = 2;

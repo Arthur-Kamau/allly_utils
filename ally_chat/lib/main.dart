@@ -70,9 +70,18 @@ class AllyHomePage extends StatelessWidget {
 
     AttachItems.tag: (context) => AttachItems(),
 
-    UserAccount.tag: (context) => UserAccount(),
+      UserAccount.tag: (context) => UserAccount(),
     AccountChangeEmail.tag: (context) => AccountChangeEmail(),
     AccountChangeNumber.tag: (context) => AccountChangeNumber(),
+    AccountChangeStatus.tag: (context) => AccountChangeStatus(),
+    AccountChangeName.tag: (context) => AccountChangeName(),
+    AccountChangeWhatIDo.tag: (context) => AccountChangeWhatIDo(),
+    AccountChangeLocation.tag: (context) => AccountChangeLocation(),
+
+
+
+
+
 
     AppInformtaionDetails.tag: (context) => AppInformtaionDetails(),
     AppInformationDevelopers.tag: (context) => AppInformationDevelopers(),

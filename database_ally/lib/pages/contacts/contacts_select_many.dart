@@ -39,6 +39,11 @@ class ContactSelectManyState extends State<ContactSelectMany> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    //check if passed in numbers is not null
+    //if not null add them to number_sleceted list
+    if(widget.numbersSelected != null && widget.numbersSelected.length >0){
+     number_Selected =widget.numbersSelected;
+    }
   }
 
   bool _numberSelected(String numberSelected) {
@@ -129,17 +134,23 @@ class ContactSelectManyState extends State<ContactSelectMany> {
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: Scaffold(
-            appBar: AppBar(
-              leading: IconButton(
-                icon: Icon(Icons.arrow_back),
-                onPressed: () {
-                  print("yyyyyyyyyy"+Contact_selected.length.toString());
-                  Navigator.pop(context, Contact_selected);
-                },
+        home: WillPopScope(
+          onWillPop: (){
+              print("button back pressed"+Contact_selected.length.toString());
+                    Navigator.pop(context, Contact_selected);
+          },
+          child: Scaffold(
+              appBar: AppBar(
+                leading: IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () {
+                    print("back button on navbar"+Contact_selected.length.toString());
+                    Navigator.pop(context, Contact_selected);
+                  },
+                ),
+                title: Text("Contact"),
               ),
-              title: Text("Contact"),
-            ),
-            body: _showAppropriatewidget()));
+              body: _showAppropriatewidget()),
+        ));
   }
 }

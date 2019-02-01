@@ -23,7 +23,8 @@ class AllyDatabase {
   }
 
   void createDatabase(Database db, int version) async {
-    await db.execute(QUERY.ContactCreateQuery);
+    await db.execute(QUERY.contactCreateQuery);
     await db.execute(QUERY.blockedContactCreateQuery);
+    await db.execute(QUERY.userAccountProfileCreateQuery);
   }
 }

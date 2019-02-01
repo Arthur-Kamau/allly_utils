@@ -4,9 +4,9 @@ import 'package:sqflite/sqflite.dart';
 
 class BlockedContactDB {
 //get alll Contact
-  Future<List<Contact>> getAllContactsBlocked(Database db) async {
+  Future<List<Contact>> getAllContactsBlocked(Database dbConnection) async {
     String sql = "SELECT * FROM  blocked_Contact";
-    var dbConnection = await db;
+
     List<Map> list = await dbConnection.rawQuery(sql);
     List<Contact> contactAll = new List();
     for (var i = 0; i < list.length; i++) {
@@ -18,6 +18,16 @@ class BlockedContactDB {
       contactAll.add(contact);
     }
     return contactAll;
+  }
+//get alll phonenumbers
+  Future<List<String>> getAllContactsBlockedPhoneNumbers(Database dbConnection) async {
+    String sql = "SELECT phone_number FROM  blocked_Contact";
+    List<Map> list = await dbConnection.rawQuery(sql);
+    List<String> phoneNumbers = new List();
+    for (var i = 0; i < list.length; i++) {
+      phoneNumbers.add(list[i]['phone_number']);
+    }
+    return phoneNumbers;
   }
 
   //add new contact
