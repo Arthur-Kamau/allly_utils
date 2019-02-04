@@ -1,28 +1,35 @@
+import 'package:ally_chat/core/contact.dart';
 import 'package:ally_chat/core/user.dart';
-import 'package:ally_chat/pages/chat/chat_history.dart';
+import 'package:ally_chat/database/contacts.dart';
+import 'package:ally_chat/database/database.dart';
 import 'package:ally_chat/pages/person/person_chat_view.dart';
+import 'package:ally_chat/pages/settings/blocked/blocked.dart';
+// import 'package:ally_chat/pages/chat/chat_history.dart';
+// import 'package:ally_chat/pages/person/person_chat_view.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter/services.dart';
+import 'package:sqflite/sqflite.dart';
 
 //intent one ->chat history
 //        two ->chat item
+//        three ->blocked Contact
 
-class ContactsSelectOne extends StatefulWidget {
-  static String tag = 'contacts-select-one-page';
+class ContactSelectOne extends StatefulWidget {
+  static String tag = 'Contact-select-one-page';
   int intent;
-  ContactsSelectOne({@required this.intent});
+  ContactSelectOne({@required this.intent});
 
   @override
-  ContactsSelectOneState createState() {
-    return new ContactsSelectOneState();
+  ContactSelectOneState createState() {
+    return new ContactSelectOneState();
   }
 }
 
-class ContactsSelectOneState extends State<ContactsSelectOne> {
+class ContactSelectOneState extends State<ContactSelectOne> {
   static const platform = const MethodChannel('com.araizen/modules/utils');
 
-  Future<Map<dynamic, dynamic>> _getContacts() async {
+  Future<Map<dynamic, dynamic>> _getContact() async {
     Map<dynamic, dynamic> _conts = {};
 
     try {
@@ -71,9 +78,11 @@ class ContactsSelectOneState extends State<ContactsSelectOne> {
                       ),
                     );
                     break;
+                  case 3:
+                    break;
                   default:
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => ChatHistory()));
+                  // Navigator.push(context,
+                  // MaterialPageRoute(builder: (context) => ChatHistory()));
                 }
               },
             ),
@@ -86,11 +95,27 @@ class ContactsSelectOneState extends State<ContactsSelectOne> {
     );
   }
 
+
+_saveAContact(String name,String phoneNumber)async{
+  Contact contact = new Contact(name: name,phoneNumber: phoneNumber);
+Database d= await AllyDatabase().db;
+
+ContactDB().addContact(contact, d);
+
+
+}
+  _saveABlockedContactAndOpenBlockedList(String name,String phoneNumber){
+//save contact to databse
+_saveAContact(name, phoneNumber);
+//open blocked Contact list item
+ MaterialPageRoute(builder: (context) => BlockedUsersList());
+  }
+
   Widget _showAppropriatewidget() {
-//    if(_contacts.length > 0){
+//    if(_Contact.length > 0){
     return Container(
         child: FutureBuilder<Map<dynamic, dynamic>>(
-      future: _getContacts(), //_calculateDistance( model,  store),
+      future: _getContact(), //_calculateDistance( model,  store),
       initialData: {"kamau": "kenn"}, //0.0,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
@@ -112,7 +137,7 @@ class ContactsSelectOneState extends State<ContactsSelectOne> {
         debugShowCheckedModeBanner: false,
         home: Scaffold(
             appBar: AppBar(
-              title: Text("Contacts"),
+              title: Text("Contact"),
             ),
             body: _showAppropriatewidget()));
   }

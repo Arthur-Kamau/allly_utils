@@ -1,14 +1,17 @@
+import 'package:ally_chat/core/contact.dart';
 import 'package:ally_chat/core/user.dart';
-import 'package:ally_chat/model/operations_models/chat_history_model.dart';
-import 'package:ally_chat/pages/contacts/contacts_select_one.dart';
+import 'package:ally_chat/database/contacts.dart';
+import 'package:ally_chat/database/database.dart';
+import 'package:ally_chat/model/chat_history_model.dart';
 import 'package:ally_chat/pages/person/person_chat_view.dart';
+import 'package:ally_chat/pages/contacts/contacts_select_one.dart';
 import 'package:flutter/material.dart';
-import 'package:ally_chat/model/operations_models/contact_model.dart';
 import 'package:ally_chat/pages/group/groups_chat_view.dart';
 import 'package:ally_chat/pages/bottom_modal/main_bottom_modal.dart';
 import 'package:connectivity/connectivity.dart';
 import 'dart:async';
-import 'package:flutter/services.dart'; 
+import 'package:flutter/services.dart';
+import 'package:sqflite/sqflite.dart'; 
 
 class ChatHistory extends StatefulWidget {
   static String tag = 'chat-history-page';
@@ -21,6 +24,39 @@ class _ChatHistoryState extends State<ChatHistory>
       String _connectionStatus = 'Unknown';
   final Connectivity _connectivity = Connectivity();
   StreamSubscription<ConnectivityResult> _connectivitySubscription;
+List<Contact> userContacts = [];
+
+  List<ChatHistoryModel> chatData;
+
+void getAllContacts() async{
+  Database conn = await AllyDatabase().db;
+userContacts = await ContactDB().getAllContact(conn);
+print("user contacts lenth ${userContacts.length}");
+}
+
+
+@override
+  void initState() {
+
+    getAllContacts();
+
+    super.initState();
+    //get messages
+    initConnectivity();
+
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
+      setState(() => _connectionStatus = result.toString());
+    });
+
+
+  }
+
+  @override
+  void dispose() {
+    _connectivitySubscription.cancel();
+    super.dispose();
+  }
 
   Widget appBar(BuildContext context) {
     return new AppBar(
@@ -72,13 +108,15 @@ class _ChatHistoryState extends State<ChatHistory>
         ]);
   }
 
-  String getPersonName(String userId) {
-    for (var i = 0; i < dummyContacts.length; i++) {
-      if (dummyContacts[i].userId == userId) {
-        return dummyContacts[i].name;
-      }
-    }
-    return "";
+  String getUserName(String phoneNumber){
+
+for (var i = 0; i < userContacts.length; i++) {
+  if(userContacts[i].phoneNumber ==  phoneNumber){
+   
+    return userContacts[i].name;
+  }
+}
+return phoneNumber;
   }
 
   Widget _personTile(ChatHistoryModel personChatHistory) {
@@ -109,10 +147,11 @@ class _ChatHistoryState extends State<ChatHistory>
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           new Text(
+        
+
+
               //show name from local name based on sender id=Userid or number
-              getPersonName(personChatHistory.senderId).isEmpty
-                  ? personChatHistory.senderPhoneNumber
-                  : getPersonName(personChatHistory.senderId),
+            getUserName(personChatHistory.senderPhoneNumber ) ,
               // chatHistory.groupName,
               style: new TextStyle(fontWeight: FontWeight.bold)),
           new Text(personChatHistory.numberMessage,
@@ -179,25 +218,7 @@ class _ChatHistoryState extends State<ChatHistory>
     }
   }
 
-  List<ChatHistoryModel> chatData;
 
-
-@override
-  void initState() {
-    super.initState();
-    //get messages
-    initConnectivity();
-    _connectivitySubscription =
-        _connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
-      setState(() => _connectionStatus = result.toString());
-    });
-  }
-
-  @override
-  void dispose() {
-    _connectivitySubscription.cancel();
-    super.dispose();
-  }
 
    // Platform messages are asynchronous, so we initialize in an async method.
   Future<Null> initConnectivity() async {
@@ -267,7 +288,7 @@ class _ChatHistoryState extends State<ChatHistory>
           await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ContactsSelectOne(
+              builder: (context) => ContactSelectOne(
                     intent: 1,
                   ),
             ),

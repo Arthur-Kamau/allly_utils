@@ -1,9 +1,9 @@
-import 'dart:async';
-import 'dart:io' as io;
-import 'package:meta/meta.dart';
-import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:path_provider/path_provider.dart';
+// import "dart:async" ;
+// import "dart:io" as io;
+import "package:meta/meta.dart";
+import "package:path/path.dart";
+import "package:sqflite/sqflite.dart";
+import "package:path_provider/path_provider.dart";
 
 class AuthData {
   static Database _db;
@@ -26,21 +26,23 @@ class AuthData {
   void _onCreate(Database db, int version) async {
     // When creating the db, create the table
     await db.execute(
-        "CREATE TABLE AuthDetails(id INTEGER PRIMARY KEY, authToken TEXT, authStatus TEXT, authTime TEXT,deviceId TEXT )");
+        "CREATE TABLE AuthDetails(id INTEGER PRIMARY KEY,name TEXT,phoneNumber TEXT,countryCode TEXT, authToken TEXT,  authTime TEXT,deviceId TEXT )");
     print("Created tables");
   }
 
   // Retrieving AuthDetailss from AuthDetails Tables
   Future<AuthDetails> getAuthDetails() async {
     var dbClient = await db;
-    List<Map> list = await dbClient.rawQuery('SELECT * FROM AuthDetails ');
+    List<Map> list = await dbClient.rawQuery('SELECT * FROM AuthDetails where id =0 ');
     //WHERE deviceId=' + deviceId);
     if (list.length > 0) {
       print("data $list");
       List<AuthDetails> auth_details = new List();
       for (int i = 0; i < list.length; i++) {
         auth_details.add(AuthDetails(
-          authStatus: int.parse(list[i]["authStatus"]),
+           name: int.parse(list[i]["name"]),
+          phoneNumber: DateTime.parse(list[i]["phoneNumber"]),
+          countryCode : DateTime.parse(list[i]["countryCode"]),
           authTime: DateTime.parse(list[i]["authTime"]),
           authtoken: list[i]["authToken"],
           deviceId: list[i]["deviceId"],
@@ -50,39 +52,30 @@ class AuthData {
 
       return auth_details[0];
     } else {
-      return AuthDetails(
-          authStatus: 0, authTime: DateTime.now(), deviceId: "", authtoken: "");
+      return null;
+      // return AuthDetails(
+      //     authStatus: 0, authTime: DateTime.now(), deviceId: "", authtoken: "");
     }
-    // List<AuthDetails> AuthDetailss = new List();
-    // for (int i = 0; i < list.length; i++) {
-    //   AuthDetailss.add(new AuthDetails(list[i]["firstname"], list[i]["lastname"],
-    //       list[i]["mobileno"], list[i]["emailid"]));
-    // }
-    // print(AuthDetailss.length);
-    // return AuthDetails;
+
   }
 
   void saveAuthDetails(AuthDetails userDetails) async {
     var dbClient = await db;
     await dbClient.transaction((txn) async {
       return await txn.rawInsert(
-          'INSERT INTO AuthDetails(authStatus, authToken, authTime, deviceId ) VALUES(' +
-              '\'' +
-              userDetails.authStatus.toString() +
-              '\'' +
-              ',' +
-              '\'' +
-              userDetails.authtoken +
-              '\'' +
-              ',' +
-              '\'' +
-              userDetails.authTime.toString() +
-              '\'' +
-              ',' +
-              '\'' +
-              userDetails.deviceId +
-              '\'' +
-              ')');
+          '''
+          INSERT INTO AuthDetails(name,phoneNumber, authToken, authTime, deviceId ) VALUES(
+            
+            '${ userDetails.name }',
+            '${ userDetails.phoneNumber ) }',
+           ${ userDetails.countryCode ) }',
+              '${userDetails.authtoken }',
+               '${ userDetails.authTime.toString() }',
+               '${ userDetails.deviceId }'
+               
+              )
+             ''' 
+              );
     });
   }
 
@@ -96,15 +89,3 @@ class AuthData {
   }
 }
 
-class AuthDetails {
-  final String authtoken;
-  final DateTime authTime;
-  final int authStatus;
-  final String deviceId;
-
-  AuthDetails(
-      {@required this.authStatus,
-      @required this.authtoken,
-      @required this.authTime,
-      @required this.deviceId});
-}

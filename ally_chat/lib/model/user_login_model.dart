@@ -1,3 +1,22 @@
+
+
+class LoginResponse{
+   bool okay;
+  String reason;
+
+  LoginResponse(
+    this.okay,
+    this.reason,
+  );
+   LoginResponse.fromJson(Map<String, dynamic> json)
+      : okay = json['okay'],
+        reason = json['reason'];
+Map<String, dynamic> toJson() => {
+        'okay': okay,
+        'reason': reason
+};
+}
+
 class UserLoginModel {
   String countryCode;
   String phoneNumber;

@@ -1,59 +1,42 @@
 class Query {
-  static String contactListTableSql = """
+  static String authDetailsTable = """
 CREATE TABLE contacts (
   id INTEGER PRIMARY KEY  AUTOINCREMENT,
   user_name TEXT,
   user_phone_number TEXT,
-  statusContactHasApp INTEGER ,
-    createdAt TEXT ,
-    updatedAt TEXT
-);
-""";
-  static String profileTable = """
-CREATE TABLE user_profile (
-  id INTEGER PRIMARY KEY  AUTOINCREMENT,
-  
-  user_image_url Text,
-  user_image_local Text,
-
-  user_name TEXT,
-  user_phone_number TEXT,
  
-  user_status TEXT,
-  user_location TEXT,
-
-
-   user_what_i_do TEXT,
-  user_gender TEXT,
-
-  user_interest TEXT,
-  user_email TEXT,
-
     createdAt TEXT ,
     updatedAt TEXT
 );
 """;
 
-  static String usersTable = """
-	CREATE TABLE IF NOT EXISTS users_table (
-		id INTEGER PRIMARY KEY   AUTOINCREMENT,
+  static String contactCreateQuery = """
+  CREATE TABLE Contact (
+    id INTEGER PRIMARY KEY ,name TEXT,phone_number TEXT
+  )""";
+  static String blockedContactCreateQuery = """
+  CREATE TABLE blocked_Contact 
+  (
+    id INTEGER PRIMARY KEY ,name TEXT,phone_number TEXT
+  )""";
+  static String userAccountProfileCreateQuery = """
+ CREATE TABLE user_Account_Profile 
+ (
+   id INTEGER PRIMARY KEY ,
+   name TEXT,
+   phone_number TEXT,
+   country_code TEXT,
+   email TEXT,
+   location TEXT,
+    status TEXT,
+   whatIDo TEXT,
+   interest TEXT,
+   image_local TEXT,
+   image_remote TEXT
+  )
+  """;
 
-		UserId   varchar(100),
-		PhoneNumber varchar(30),
-		UserName varchar(50),
-		PublicName varchar(50),
  
-		UserAvatar varchar(100),
-		WhatIDo varchar(50),
-		UserInterest text,
-		UserGender INTEGER DEFAULT 3,
-		UserLatLong varchar(50), 
-		UserLocation varchar(50), 
-		
-    createdAt TEXT ,
-    updatedAt TEXT
-	)""";
-
   static String groupsTable = """
 	CREATE TABLE IF NOT EXISTS groups_table (
 		id INTEGER PRIMARY KEY   AUTOINCREMENT,
@@ -70,21 +53,6 @@ CREATE TABLE user_profile (
   createdAt TEXT ,
     updatedAt TEXT
 	)""";
-
-  static String blockedTable = """
-CREATE TABLE IF NOT EXISTS user_contacts_blocked (
-		id serial PRIMARY KEY,
-
-	    userBlocking  varchar(100),
-		name varchar(100),
-		phoneNumber varchar(100) NOT NULL,
-		email varchar(100),
-		has_app INTEGER,
-
-  createdAt TEXT ,
-    updatedAt TEXT
-	)
- """;
 
   static String mailTable = """
 	CREATE TABLE IF NOT EXISTS mail_table (

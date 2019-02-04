@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:ally_chat/model/operations_models/contact_model.dart';
+import 'package:ally_chat/model/contact_model.dart';
 
 
 class SelectInterestOne extends StatefulWidget {
@@ -9,6 +9,9 @@ class SelectInterestOne extends StatefulWidget {
 }
 
 class _SelectInterestOneState extends State<SelectInterestOne> {
+
+  List<String> interestList = ["Sport","Games","Tech"];
+
   Widget appBar(BuildContext context) {
     return new AppBar(
 
@@ -127,39 +130,39 @@ List<Color> colors = [
     );
   }
 
-  Widget interestList(BuildContext context) {
+  Widget interestListItems(BuildContext context) {
     return new ListView.builder(
-      itemCount: dummyContacts.length,
+      itemCount: interestList.length,
       itemBuilder: (context, i) => new Column(
             children: <Widget>[
               new ListTile(
                 onTap: () {
                   print("contact choi");
                 },
-                leading: dummyContacts[i].avatar.isEmpty
-                    ? _generateUserChar(dummyContacts[i].name)
-                    : _userPicture(dummyContacts[i].avatar),
+                // leading: interestList[i].avatar.isEmpty
+                //     ? _generateUserChar(interestList[i].name)
+                //     : _userPicture(interestList[i].avatar),
                 title: new Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    new Text(dummyContacts[i].name,
+                    new Text(interestList[i],
                         style: new TextStyle(fontWeight: FontWeight.bold)),
-                    Checkbox(
-                      value: dummyContacts[i].isselected,
-                      onChanged: (newVal) {
-                        print("$newVal");
-                        setState(() {
-                           dummyContacts[i].isselected = dummyContacts[i].isselected ? false : true;                       
-                        });
-                      },
-                    )
+                    // Checkbox(
+                    //   value: interestList[i].isselected,
+                    //   onChanged: (newVal) {
+                    //     print("$newVal");
+                    //     setState(() {
+                    //        interestList[i].isselected = interestList[i].isselected ? false : true;                       
+                    //     });
+                      // },
+                    // )
                   ],
                 ),
-                subtitle: new Container(
-                  padding: const EdgeInsets.only(top: 2.0),
-                  child: new Text(dummyContacts[i].mssidn,
-                      style: new TextStyle(color: Colors.grey, fontSize: 12.0)),
-                ),
+                // subtitle: new Container(
+                //   padding: const EdgeInsets.only(top: 2.0),
+                //   child: new Text(interestList[i].mssidn,
+                //       style: new TextStyle(color: Colors.grey, fontSize: 12.0)),
+                // ),
               ),
               new Divider(
                 height: 2.0,
@@ -173,7 +176,7 @@ List<Color> colors = [
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: appBar(context),
-      body: interestList(context),
+      body: interestListItems(context),
     );
   }
 }

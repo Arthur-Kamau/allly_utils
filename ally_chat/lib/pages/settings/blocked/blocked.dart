@@ -1,9 +1,9 @@
 import 'package:ally_chat/core/contact.dart';
+import 'package:ally_chat/database/blocked_contacts.dart';
+import 'package:ally_chat/database/database.dart';
+import 'package:ally_chat/database/db.dart';
 import 'package:ally_chat/pages/contacts/contacts_select_many.dart';
-import 'package:ally_chat/pages/contacts/contacts_select_one.dart';
 import 'package:flutter/material.dart';
-
-import 'package:ally_chat/model/operations_models/chat_history_model.dart';
 
 class BlockedUsersList extends StatefulWidget {
   static String tag = 'user-settings-blockedusers-page';
@@ -11,58 +11,74 @@ class BlockedUsersList extends StatefulWidget {
 }
 
 class _BlockedUsersListState extends State<BlockedUsersList> {
-  List<Contact> _contacts_blocked = [
-    Contact(name: "kaaaaa", phoneNumber: "101919"),
-    Contact(name: "kaaaaa", phoneNumber: "101919")
-  ]; // new List<Contact>();
+  // List<Contact> _contact_blocked = []; // new List<Contact>();
+  // List<Contact> _contact_blocked_priv = [];
+  // List<String> numbersSelectedFromDatabase = [];
 
-  Widget _blockedContactsList() {
-    //return Text("length ${_contacts_blocked.length}");
-    return new ListView.builder(
-      itemCount: _contacts_blocked.length,
-      itemBuilder: (context, i) => new Column(
-            children: <Widget>[
-              new ListTile(
-                onTap: () {
-                  print("Show group chat view");
-                },
-                onLongPress: () {
-                  print("show contex menu");
-                },
-                // leading: new CircleAvatar(
-                //     foregroundColor: Theme.of(context).primaryColor,
-                //     backgroundColor: Colors.grey,
-                //     backgroundImage: new AssetImage(dummyData[i].avatarUrl)),
-                title: new Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    new Text(_contacts_blocked[i].name,
-                        style: new TextStyle(fontWeight: FontWeight.bold)),
-                    IconButton(
-                      onPressed: () {
-                        List<Contact> new_contacts_blocked =
-                            new List<Contact>();
-                        _contacts_blocked.removeAt(i);
+  Future<List<Contact>> getBlockedContactFromDatabase() async {
+    var conn = await AllyDatabase().db;
+    var contacts =  BlockedContactDB().getAllContactsBlocked(conn);
 
-                        _contacts_blocked.forEach((item) {
-                          new_contacts_blocked.add(item);
-                        });
+    return contacts;
+  }
 
-                        setState(() {
-                          _contacts_blocked = new_contacts_blocked;
-                        });
-                      },
-                      icon: Icon(Icons.delete),
-                    )
-                  ],
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    //save to database
+    super.dispose();
+  }
+
+  Widget _blockedContactList(List<Contact> _contactBlocked) {
+    if (_contactBlocked != null && _contactBlocked.length > 0) {
+      return new ListView.builder(
+        itemCount: _contactBlocked.length,
+        itemBuilder: (context, i) => new Column(
+              children: <Widget>[
+                new ListTile(
+                  onTap: () {
+                    print("Show group chat view");
+                  },
+                  onLongPress: () {
+                    print("show contex menu");
+                  },
+                  title: new Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      new Text(_contactBlocked[i].name,
+                          style: new TextStyle(fontWeight: FontWeight.bold)),
+                      IconButton(
+                        onPressed: () {
+//remove from database
+                          AllyDatabase().db.then((con) {
+                            BlockedContactDB()
+                                .removeAContact(_contactBlocked[i], con);
+                          });
+
+//show in view
+                          setState(() {});
+                        },
+                        icon: Icon(Icons.delete),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              new Divider(
-                height: 10.0,
-              ),
-            ],
-          ),
-    );
+                new Divider(
+                  height: 10.0,
+                ),
+              ],
+            ),
+      );
+    } else {
+      //no blocked contacts
+      return Center(
+        child: Text("No Contact blocked."),
+      );
+    }
   }
 
   Widget _appbar() {
@@ -74,34 +90,28 @@ class _BlockedUsersListState extends State<BlockedUsersList> {
         IconButton(
           icon: Icon(Icons.add),
           onPressed: () async {
-            // Navigator.pushNamed(context, ContactsSelectMany.tag);
+            // Navigator.pushNamed(context, ContactSelectMany.tag);
+            var cons = await AllyDatabase().db;
+            List<String> blockedNumbers = await BlockedContactDB()
+                .getAllContactsBlockedPhoneNumbers(cons);
+
             List<Contact> result = await Navigator.push(
               context,
               // We'll create the SelectionScreen in the next step!
-              MaterialPageRoute(builder: (context) => ContactsSelectMany()),
+              MaterialPageRoute(
+                  builder: (context) =>
+                      ContactSelectMany(numbersSelected: blockedNumbers)),
             );
-            print("the res  yyyyyyyyyy" + result.length.toString());
 
             if (result != null && result.length > 0) {
-              _contacts_blocked = new List<Contact>();
               for (var i = 0; i < result.length; i++) {
                 print(
                     "\n con select many phone ${result[i].phoneNumber} name ${result[i].name} \n");
 
-                //   _contacts_blocked.add(Contact(
-                //       name: result[i].name,
-                //       phoneNumber: result[i].phoneNumber));
-
+                AllyDatabase().db.then((con) {
+                  BlockedContactDB().addContact(result[i], con);
+                });
               }
-            }
-
-// setState(() { });
-
-            if (result != null && result.toString().isNotEmpty) {
-              setState(() {
-                // _contacts_blocked.addAll(result);// = result;
-                _contacts_blocked = result;
-              });
             }
           },
         )
@@ -110,21 +120,19 @@ class _BlockedUsersListState extends State<BlockedUsersList> {
   }
 
   Widget _showAppropriateWidget() {
-    if (_contacts_blocked != null) {
-      if (_contacts_blocked.length > 0) {
-        //show contacts blocked list
-        return _blockedContactsList();
-      } else {
-        return Center(
-          child: Text("No contacts blocked."),
-        );
-      }
-    } else {
-      //no contacts blcoed
-      return Center(
-        child: Text("No contacts blocked"),
-      );
-    }
+    return new FutureBuilder(
+        future: getBlockedContactFromDatabase(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.hasData) {
+            return _blockedContactList(snapshot.data);
+          } else if (snapshot.error) {
+            return Center(
+              child: Text("No Contact blocked"),
+            );
+          } else {
+            return CircularProgressIndicator();
+          }
+        });
   }
 
   @override

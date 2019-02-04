@@ -1,9 +1,6 @@
 import 'dart:io';
 
-import 'package:ally_chat/model/operations_models/contact_model.dart';
 import 'package:ally_chat/pages/attach_items/pictures_screen.dart';
-import 'package:ally_chat/pages/settings/account/change_email.dart';
-import 'package:ally_chat/pages/transition/slide_right_transition.dart';
 import 'package:flutter/material.dart';
 
 class UserProfile extends StatefulWidget {

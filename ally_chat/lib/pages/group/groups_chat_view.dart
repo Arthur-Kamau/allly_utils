@@ -1,5 +1,5 @@
 import 'package:ally_chat/database/p2gChat.dart';
-import 'package:ally_chat/model/operations_models/chat_model.dart';
+import 'package:ally_chat/model/chat_model.dart';
 import 'package:ally_chat/core/user.dart';
 import 'package:ally_chat/database/db.dart';
 import 'package:ally_chat/pages/attach_items/attach_items.dart';

@@ -1,4 +1,4 @@
-import 'package:ally_chat/model/operations_models/contact_model.dart';
+import 'package:ally_chat/model/contact_model.dart';
 import 'package:flutter/material.dart';
 
 class GroupsDetails extends StatefulWidget {

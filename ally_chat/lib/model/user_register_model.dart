@@ -1,3 +1,20 @@
+
+class RegisterResponse{
+   bool okay;
+  String reason;
+
+  RegisterResponse(
+    this.okay,
+    this.reason,
+  );
+   RegisterResponse.fromJson(Map<String, dynamic> json)
+      : okay = json['okay'],
+        reason = json['reason'];
+Map<String, dynamic> toJson() => {
+        'okay': okay,
+        'reason': reason
+};
+}
 class Register {
   String name;
   String phoneNumber;

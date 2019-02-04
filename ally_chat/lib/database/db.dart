@@ -29,15 +29,14 @@ class AllyNativeDb {
     //create the tables
     print("\n\n Create tables \n\n");
     //contact list
-    await db.execute(Query.contactListTableSql);
-    //contact list
-    await db.execute(Query.profileTable);
-    //users table
-    await db.execute(Query.usersTable);
+    await db.execute(Query.contactCreateQuery);
+    //blocked contact list
+    await db.execute(Query.blockedContactCreateQuery);
+    
+    //users profile table
+    await db.execute(Query.userAccountProfileCreateQuery);
     //groups table
     await db.execute(Query.groupsTable);
-    // blockedTable
-    await db.execute(Query.blockedTable);
     //mail table
     await db.execute(Query.mailTable);
     //style table

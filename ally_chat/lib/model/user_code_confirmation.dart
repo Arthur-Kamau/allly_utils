@@ -1,22 +1,20 @@
 class UserCodeConfirmationModel {
   int id;
+  bool aunthentified;
   String token;
-  String code;
-  DateTime createdAt;
-  DateTime updatedAt;
+  String name;
+ 
 
   UserCodeConfirmationModel.fromJson(Map<String, dynamic> json)
       : id = json['id'],
+        aunthentified = json['aunthentified'],
         token = json['token'],
-        code = json['code'],
-        createdAt = json['create_at'],
-        updatedAt = json['update_at'];
+        name = json['name'];
 
   Map<String, dynamic> toJson() => {
         'id': id,
+        'aunthentified' : aunthentified,
         'token': token,
-        'code': code,
-        'create_at': createdAt,
-        'update_at': updatedAt
+        'code': name,
       };
 }

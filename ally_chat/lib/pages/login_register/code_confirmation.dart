@@ -1,10 +1,10 @@
-import 'package:ally_chat/database/auth_data_db.dart';
+import 'package:ally_chat/model/authData.dart';
+import 'package:ally_chat/model/user_code_confirmation.dart';
 import 'package:ally_chat/pages/login_register/register.dart';
 import 'package:ally_chat/pages/chat/chat_history.dart';
+import 'package:ally_chat/sharedPreferences/phoneNumber.dart';
 import 'package:flutter/material.dart';
-import 'package:ally_chat/pages/chat/chat_history.dart';
 import 'package:ally_chat/utils/app_id.dart';
-import 'package:ally_chat/utils/phone_number.dart';
 import 'package:ally_chat/utils/random.dart';
 
 // import 'package:ally_native/pages/landing/landing.dart';
@@ -22,7 +22,17 @@ class ConfirmCode extends StatefulWidget {
 class _ConfirmCodePageState extends State<ConfirmCode> {
   final _formKey = GlobalKey<FormState>();
   String _email, _password;
+String error;
 
+  Padding errorText() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Text(
+        error,
+        style: TextStyle(fontSize: 13.0, color: Colors.blue),
+      ),
+    );
+  }
   Padding buildTitle() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -47,7 +57,7 @@ class _ConfirmCodePageState extends State<ConfirmCode> {
     );
   }
 
-  TextFormField buildEmailTextField() {
+  TextFormField buildCodeConfirmationTextField() {
     return TextFormField(
       keyboardType: TextInputType.number,
       onSaved: (phonenumberInput) => _email = phonenumberInput,
@@ -66,33 +76,44 @@ class _ConfirmCodePageState extends State<ConfirmCode> {
         height: 50.0,
         width: 270.0,
         child: FlatButton(
-          onPressed: () {
+          onPressed: () async {
             if (_formKey.currentState.validate()) {
               //Only gets here if the fields pass
               _formKey.currentState.save();
               //TODO Check values and navigate to new page
 
+UserCodeConfirmationModel data = Post().postCodeConfirmationData();
+
+if(data.aunthentified){
               //auth confirmation code
               //save app details
-              PhoneNumber().getPhoneNumber().then((phone_number) {
-                print("user phone number $phone_number");
-              });
+String countryCodeStr = await UserPhoneNumberAndCountryCodePreferenceAsset().getCountryCode();
+String phoneNumberstr = await UserPhoneNumberAndCountryCodePreferenceAsset().getPhoneNumber();
+
               //save appdetails
               String getAppToken = AppRandom().randomString(20);
               AppId().getAppId().then((appid) {
                 var auth = AuthDetails(
-                    authStatus: 1,
+                   phoneNumber: phoneNumberstr,
+                   countryCode : countryCodeStr,
+                   name: data.name,
                     authTime: DateTime.now(),
                     authtoken: getAppToken,
                     deviceId: appid);
-                var dbHelper = AuthData();
-                dbHelper.saveAuthDetails(auth);
+
+                   AuthData().saveAuthDetails(auth);
               });
 
               //then naivigate to homepage
 
               Navigator.pushNamedAndRemoveUntil(
                   context, ChatHistory.tag, (_) => false);
+            }
+            }else{
+String errorstr ="invalid code,try again";
+setState(() {
+  error = errorstr;
+});
             }
           },
           color: Colors.blue, //grey[900],
@@ -173,9 +194,13 @@ class _ConfirmCodePageState extends State<ConfirmCode> {
             buildTitle(),
             buildTitleLine(),
             SizedBox(
-              height: 50.0,
+              height: 10.0,
             ),
-            buildEmailTextField(),
+            errorText(),
+             SizedBox(
+              height: 10.0,
+            ),
+            buildCodeConfirmationTextField(),
             SizedBox(
               height: 30.0,
             ),
@@ -199,6 +224,9 @@ class _ConfirmCodePageState extends State<ConfirmCode> {
       ),
     );
   }
+}
+
+Post() {
 }
 
 // import 'package:flutter/material.dart';

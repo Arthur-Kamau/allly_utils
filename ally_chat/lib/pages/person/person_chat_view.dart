@@ -1,5 +1,5 @@
-import 'package:ally_chat/model/operations_models/chat_model.dart';
-import 'package:ally_chat/model/operations_models/contact_model.dart';
+import 'package:ally_chat/model/chat_model.dart';
+import 'package:ally_chat/model/contact_model.dart';
 import 'package:ally_chat/core/user.dart';
 import 'package:ally_chat/database/db.dart';
 import 'package:ally_chat/database/p2pChat.dart';

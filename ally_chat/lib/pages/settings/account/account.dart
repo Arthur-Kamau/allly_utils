@@ -1,15 +1,11 @@
 import 'dart:io';
-import 'package:ally_chat/model/operations_models/contact_model.dart';
 import 'package:ally_chat/pages/Interests/Interest_select_many.dart';
-import 'package:ally_chat/pages/Interests/Interest_select_one.dart';
 import 'package:ally_chat/pages/attach_items/pictures_screen.dart';
 import 'package:ally_chat/pages/settings/account/change_email.dart';
 import 'package:ally_chat/pages/settings/account/change_location.dart';
 import 'package:ally_chat/pages/settings/account/change_name.dart';
-import 'package:ally_chat/pages/settings/account/change_number.dart';
 import 'package:ally_chat/pages/settings/account/change_status.dart';
 import 'package:ally_chat/pages/settings/account/change_what_i_do.dart';
-import 'package:ally_chat/pages/transition/slide_right_transition.dart';
 import 'package:flutter/material.dart';
 
 class UserAccount extends StatefulWidget {

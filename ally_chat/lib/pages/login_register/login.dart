@@ -1,3 +1,5 @@
+import 'package:ally_chat/model/user_login_model.dart';
+import 'package:ally_chat/sharedPreferences/phoneNumber.dart';
 import 'package:flutter/material.dart';
 import 'package:ally_chat/pages/login_register/register.dart';
 import 'package:ally_chat/pages/login_register/code_confirmation.dart';
@@ -17,6 +19,26 @@ class _LoginPageState extends State<LogInPage> {
   String _email, _password;
   // bool _isObscured = true;
   // Color _eyeButtonColor = Colors.grey;
+  String error;
+
+  TextEditingController phoneNumberController = new TextEditingController();
+  TextEditingController countryCodeController;
+
+  @override
+  void initState() {
+    super.initState();
+    countryCodeController = new TextEditingController(text: "+254");
+  }
+
+  Padding errorText() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Text(
+        error,
+        style: TextStyle(fontSize: 13.0, color: Colors.blue),
+      ),
+    );
+  }
 
   Padding buildTitle() {
     return Padding(
@@ -42,29 +64,51 @@ class _LoginPageState extends State<LogInPage> {
     );
   }
 
-  TextFormField buildEmailTextField() {
-    return TextFormField(
-      keyboardType: TextInputType.number,
-      onSaved: (phonenumberInput) => _email = phonenumberInput,
-      validator: (phonenumberInput) {
-        if (phonenumberInput.isEmpty) {
-          return 'Please enter your phone number';
-        }
-      },
-      decoration: InputDecoration(labelText: 'Phone Number'),
+  Widget buildCountryCodeTextField() {
+    return Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: Container(
+        margin: EdgeInsets.only(top: 25.0),
+        width: 40.0,
+        height: 60.0,
+        child: TextFormField(
+          controller: countryCodeController,
+          keyboardType: TextInputType.numberWithOptions(),
+          //onSaved: (phonenumberInput) => _phonenumber = phonenumberInput,
+          validator: (phonenumberInput) {
+            if (phonenumberInput.isEmpty) {
+              return 'empty??';
+            }
+          },
+        ),
+      ),
     );
   }
 
-  Padding buildPasswordText() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 8.0),
-      child: Align(
-        alignment: Alignment.centerRight,
-        child: Text(
-          'Forgot Password?',
-          style: TextStyle(fontSize: 12.0, color: Colors.grey),
-        ),
+  Widget buildPhoneNumberTextField() {
+    return Container(
+      child: TextFormField(
+        controller: phoneNumberController,
+        keyboardType: TextInputType.number,
+        onSaved: (phonenumberInput) => _email = phonenumberInput,
+        validator: (phonenumberInput) {
+          if (phonenumberInput.isEmpty) {
+            return 'Please enter your phone number';
+          }
+        },
+        decoration: InputDecoration(labelText: 'Phone Number'),
       ),
+    );
+  }
+
+  Widget _phoneNumberWidget() {
+    return Row(
+      children: <Widget>[
+        buildCountryCodeTextField(),
+        SizedBox(width: 10.0),
+        //buildEmailTextField()
+        buildPhoneNumberTextField(),
+      ],
     );
   }
 
@@ -74,12 +118,24 @@ class _LoginPageState extends State<LogInPage> {
         height: 50.0,
         width: 270.0,
         child: FlatButton(
-          onPressed: () {
-            if (_formKey.currentState.validate()) {
-              //Only gets here if the fields pass
-              _formKey.currentState.save();
-              //TODO Check values and navigate to new page
+          onPressed: () async {
+            LoginResponse data = Post().postLoginData();
+
+            if (data.okay) {
+              String countryCodeStr = countryCodeController.text;
+              String phoneNumberstr = phoneNumberController.text;
+
+              await UserPhoneNumberAndCountryCodePreferenceAsset()
+                  .setCountryCode(countryCodeStr);
+              await UserPhoneNumberAndCountryCodePreferenceAsset()
+                  .setPhoneNumber(phoneNumberstr);
+
               Navigator.of(context).pushNamed(ConfirmCode.tag);
+            } else {
+              String errorstr = data.reason;
+              setState(() {
+                error = errorstr;
+              });
             }
           },
           color: Colors.blue, //grey[900],
@@ -91,21 +147,6 @@ class _LoginPageState extends State<LogInPage> {
           ),
         ),
       ),
-    );
-  }
-
-  Container buildSocialMediaButtons(IconData icon, Color iconColor) {
-    return Container(
-      child: InkWell(
-        onTap: () {},
-        borderRadius: BorderRadius.circular(30.0),
-        child: Icon(icon, color: iconColor),
-      ),
-      height: 46.0,
-      width: 46.0,
-      decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          border: Border.all(color: Colors.grey, width: 0.5)),
     );
   }
 
@@ -152,9 +193,13 @@ class _LoginPageState extends State<LogInPage> {
             buildTitle(),
             buildTitleLine(),
             SizedBox(
-              height: 70.0,
+              height: 50.0,
             ),
-            buildEmailTextField(),
+            errorText(),
+            SizedBox(
+              height: 10.0,
+            ),
+            _phoneNumberWidget(),
             SizedBox(
               height: 30.0,
             ),

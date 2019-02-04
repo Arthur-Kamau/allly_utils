@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:ally_chat/model/operations_models/interest_model.dart';
+import 'package:ally_chat/model/interest_model.dart';
 
 
 class SelectInterestMany extends StatefulWidget {

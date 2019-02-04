@@ -1,6 +1,5 @@
 
-import 'package:ally_chat/model/operations_models/chat_model.dart';
-import 'package:ally_chat/model/operations_models/contact_model.dart';
+import 'package:ally_chat/model/chat_model.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';

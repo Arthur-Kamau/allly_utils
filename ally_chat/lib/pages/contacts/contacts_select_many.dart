@@ -1,25 +1,28 @@
 import 'package:ally_chat/core/contact.dart';
 import 'package:ally_chat/core/user.dart';
-import 'package:ally_chat/pages/person/person_chat_view.dart';
+// import 'package:database_ally/pages/person/person_chat_view.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter/services.dart';
 
-class ContactsSelectMany extends StatefulWidget {
-  static String tag = 'contacts-select-one-page';
+class ContactSelectMany extends StatefulWidget {
+  static String tag = 'Contact-select-one-page';
+   List<String>  numbersSelected ;
+
+   ContactSelectMany({this.numbersSelected});
   @override
-  ContactsSelectManyState createState() {
-    return new ContactsSelectManyState();
+  ContactSelectManyState createState() {
+    return new ContactSelectManyState();
   }
 }
 
-class ContactsSelectManyState extends State<ContactsSelectMany> {
+class ContactSelectManyState extends State<ContactSelectMany> {
   static const platform = const MethodChannel('com.araizen/modules/utils');
 
-  List<Contact> contacts_selected = new List<Contact>();
+  List<Contact> Contact_selected = new List<Contact>();
   List<String> number_Selected = [];
 
-  Future<Map<dynamic, dynamic>> _getContacts() async {
+  Future<Map<dynamic, dynamic>> _getContact() async {
     Map<dynamic, dynamic> _conts = {};
 
     try {
@@ -36,6 +39,11 @@ class ContactsSelectManyState extends State<ContactsSelectMany> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    //check if passed in numbers is not null
+    //if not null add them to number_sleceted list
+    if(widget.numbersSelected != null && widget.numbersSelected.length >0){
+     number_Selected =widget.numbersSelected;
+    }
   }
 
   bool _numberSelected(String numberSelected) {
@@ -66,12 +74,12 @@ class ContactsSelectManyState extends State<ContactsSelectMany> {
                     setState(() {
                       if (newVal) {
                         number_Selected.add(values[key].toString());
-                        contacts_selected.add(Contact(
+                        Contact_selected.add(Contact(
                             name: key.toString(),
                             phoneNumber: values[key].toString()));
                       } else {
                         number_Selected.remove(values[key].toString());
-                        contacts_selected.remove(Contact(
+                        Contact_selected.remove(Contact(
                             name: key.toString(),
                             phoneNumber: values[key].toString()));
                       }
@@ -103,10 +111,10 @@ class ContactsSelectManyState extends State<ContactsSelectMany> {
   }
 
   Widget _showAppropriatewidget() {
-//    if(_contacts.length > 0){
+//    if(_Contact.length > 0){
     return Container(
         child: FutureBuilder<Map<dynamic, dynamic>>(
-      future: _getContacts(), //_calculateDistance( model,  store),
+      future: _getContact(), //_calculateDistance( model,  store),
       initialData: {"data": "user"}, //0.0,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
@@ -126,17 +134,23 @@ class ContactsSelectManyState extends State<ContactsSelectMany> {
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: Scaffold(
-            appBar: AppBar(
-              leading: IconButton(
-                icon: Icon(Icons.arrow_back),
-                onPressed: () {
-                  print("yyyyyyyyyy"+contacts_selected.length.toString());
-                  Navigator.pop(context, contacts_selected);
-                },
+        home: WillPopScope(
+          onWillPop: (){
+              print("button back pressed"+Contact_selected.length.toString());
+                    Navigator.pop(context, Contact_selected);
+          },
+          child: Scaffold(
+              appBar: AppBar(
+                leading: IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () {
+                    print("back button on navbar"+Contact_selected.length.toString());
+                    Navigator.pop(context, Contact_selected);
+                  },
+                ),
+                title: Text("Contact"),
               ),
-              title: Text("Contacts"),
-            ),
-            body: _showAppropriatewidget()));
+              body: _showAppropriatewidget()),
+        ));
   }
 }

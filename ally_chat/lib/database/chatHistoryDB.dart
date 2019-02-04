@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io' as io;
-import 'package:ally_chat/model/operations_models/chat_history_model.dart';
+import 'package:ally_chat/model/chat_history_model.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';

@@ -1,9 +1,14 @@
+import 'dart:convert';
+
 import 'package:ally_chat/core/urls.dart';
+import 'package:ally_chat/model/user_login_model.dart';
+import 'package:ally_chat/model/user_register_model.dart';
+import 'package:ally_chat/model/user_code_confirmation.dart';
 import 'package:dio/dio.dart';
 
 class Post {
   //post login data
- Future<Map<POSTSTATUS,String>> postLoginData(String uniqueId, String phoneNumber,String userAgent) async {
+ Future<LoginResponse> postLoginData(String uniqueId, String phoneNumber,String userAgent) async {
     Dio dio = new Dio();
     Response response;
     var map = <POSTSTATUS,String> {};
@@ -16,6 +21,10 @@ class Post {
         "user_agent": userAgent
         }
       );
+         Map userMap = jsonDecode(response.data);
+var res = new LoginResponse.fromJson(userMap);
+
+      return res;
     } on DioError catch (e) {
       // The request was made and the server responded with a status code
       // that falls out of the range of 2xx and is also not 304.
@@ -28,21 +37,18 @@ class Post {
         print(e.response.toString());
         print(e.message);
       }
-      map[POSTSTATUS.ERR] = e.message;
-      return map;
+      return null;
     }
-    print("result-->" + response.data);
-    map[POSTSTATUS.OK] = response.data;
-    return map;
+   
   }
 
   //post register data
-Future<Map<POSTSTATUS,String>> postRegisterData(String uniqueId, String phoneNumber,String userAgent,String userName,String userLat,String userLong) async {
+Future<RegisterResponse> postRegisterData(String uniqueId, String phoneNumber,String userAgent,String userName,String userLat,String userLong) async {
     Dio dio = new Dio();
     Response response;
     var map = <POSTSTATUS,String> {};
     try {
-      //404
+    
       response = await dio.post(URLS.register, 
       data: {
         "unique_id": uniqueId, 
@@ -53,6 +59,10 @@ Future<Map<POSTSTATUS,String>> postRegisterData(String uniqueId, String phoneNum
         "user_long": userLong
         }
       );
+      Map userMap = jsonDecode(response.data);
+var res = new RegisterResponse.fromJson(userMap);
+
+      return res;
     } on DioError catch (e) {
       // The request was made and the server responded with a status code
       // that falls out of the range of 2xx and is also not 304.
@@ -65,19 +75,17 @@ Future<Map<POSTSTATUS,String>> postRegisterData(String uniqueId, String phoneNum
         print(e.response.toString());
         print(e.message);
       }
-      map[POSTSTATUS.ERR] = e.message;
-      return map;
+     
+      return null;
     }
-    print("result-->" + response.data);
-    map[POSTSTATUS.OK] = response.data;
-    return map;
+    
   }
 
   //post code confirmatrion data
-Future<Map<POSTSTATUS,String>> postCodeConfirmationData(String uniqueId, String phoneNumber,String userAgent,String codeConfirmation) async {
+Future<UserCodeConfirmationModel> postCodeConfirmationData(String uniqueId, String phoneNumber,String userAgent,String codeConfirmation) async {
     Dio dio = new Dio();
     Response response;
-    var map = <POSTSTATUS,String> {};
+    
     try {
       //404
       response = await dio.post(URLS.codeConfirmation, 
@@ -88,6 +96,12 @@ Future<Map<POSTSTATUS,String>> postCodeConfirmationData(String uniqueId, String 
         "user_agent": userAgent
         }
       );
+
+Map userMap = jsonDecode(response.data);
+var auth = new UserCodeConfirmationModel.fromJson(userMap);
+
+
+      return  auth;
     } on DioError catch (e) {
       // The request was made and the server responded with a status code
       // that falls out of the range of 2xx and is also not 304.
@@ -100,12 +114,10 @@ Future<Map<POSTSTATUS,String>> postCodeConfirmationData(String uniqueId, String 
         print(e.response.toString());
         print(e.message);
       }
-      map[POSTSTATUS.ERR] = e.message;
-      return map;
+    
+return null;
     }
-    print("result-->" + response.data);
-    map[POSTSTATUS.OK] = response.data;
-    return map;
+    
   }
 
 }

@@ -1,7 +1,11 @@
+import 'package:ally_chat/database/db.dart';
+import 'package:ally_chat/model/user_register_model.dart';
+import 'package:ally_chat/sharedPreferences/name.dart';
+import 'package:ally_chat/sharedPreferences/phoneNumber.dart';
 import 'package:flutter/material.dart';
 import 'package:ally_chat/pages/login_register/code_confirmation.dart';
 import 'package:ally_chat/pages/login_register/login.dart';
-import 'package:ally_chat/utils/phone_number.dart';
+
 
 class RegisterPage extends StatefulWidget {
   static String tag = 'register-page';
@@ -16,13 +20,23 @@ class RegisterPage extends StatefulWidget {
 class _LoginPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
   String _name, _phonenumber;
-  bool _isObscured = true;
-  Color _eyeButtonColor = Colors.grey;
+
 
   TextEditingController phoneNumberController = new TextEditingController();
   TextEditingController countryCodeController = new TextEditingController();
   TextEditingController nameController = new TextEditingController();
 
+String error;
+
+  Padding errorText() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Text(
+        error,
+        style: TextStyle(fontSize: 13.0, color: Colors.blue),
+      ),
+    );
+  }
   Padding buildTitle() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -101,18 +115,30 @@ class _LoginPageState extends State<RegisterPage> {
         height: 50.0,
         width: 270.0,
         child: FlatButton(
-          onPressed: () {
-            if (_formKey.currentState.validate()) {
-              //Only gets here if the fields pass
-              _formKey.currentState.save();
-              //TODO Check values and navigate to new page
+          onPressed: () async {
+            
+              RegisterResponse regResponse = Post().postRegisterData();
 
-//store phone number
-// String filteredPhoneNumber = PhoneNumber().filterPhoneNumber(phoneNumberController.text, countryCodeController.text);
-// PhoneNumber().setPhoneNumber(filteredPhoneNumber);
+              if (regResponse.okay) {
+                String countryCodeStr = countryCodeController.text;
+                String phoneNumberstr = phoneNumberController.text;
+                String name = nameController.text;
 
-              Navigator.of(context).pushNamed(ConfirmCode.tag);
+                await UserPhoneNumberAndCountryCodePreferenceAsset()
+                    .setCountryCode(countryCodeStr);
+                await UserPhoneNumberAndCountryCodePreferenceAsset()
+                    .setPhoneNumber(phoneNumberstr);
+                await ContactNamePreferenceAsset().setUserName(name);
+
+                Navigator.of(context).pushNamed(ConfirmCode.tag);
+              
+            }else{
+                String errorstr = regResponse.reason;
+                setState(() {
+                  error = errorstr;
+                });
             }
+
           },
           color: Colors.blue, //grey[900],
           shape:
@@ -235,7 +261,11 @@ class _LoginPageState extends State<RegisterPage> {
             buildTitle(),
             buildTitleLine(),
             SizedBox(
-              height: 70.0,
+              height: 50.0,
+            ),
+            errorText(),
+            SizedBox(
+              height: 10.0,
             ),
             buildNameTextField(),
             SizedBox(
