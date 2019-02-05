@@ -1,7 +1,7 @@
+import 'package:ally_chat/database/database.dart';
 import 'package:ally_chat/model/chat_model.dart';
 import 'package:ally_chat/model/contact_model.dart';
 import 'package:ally_chat/core/user.dart';
-import 'package:ally_chat/database/db.dart';
 import 'package:ally_chat/database/p2pChat.dart';
 import 'package:ally_chat/pages/attach_items/attach_items.dart';
 import 'package:ally_chat/pages/chat/chat_history.dart';
@@ -106,9 +106,7 @@ class _P2PChatViewState extends State<P2PChatView>
 
   bool _isWritting = false;
 
-  //filter chats list to chat with the chat id
-  List<ChatP2PModel> mychattData_ = new List();
-  List<ChatP2PModel> mychattData = new List();
+  
 
   static const platform = const MethodChannel('com.araizen/modules/utils');
   Future<Map<dynamic, dynamic>> contactsData;
@@ -130,46 +128,14 @@ class _P2PChatViewState extends State<P2PChatView>
   }
 
 
- void  getChatsFromDb()async{
-    Database db = await AllyNativeDb().db();
 
-     P2PDB().getp2pChats(db, User.userId).then((chats){
-         for (var i = 0; i < chats.length; i++) {
-      print("a chat ${chats[i].senderphoneNumber}");
-      // if (chattData.person_to_person[i].chatId == widget.chatId) {
-      //   mychattData_.add(chattData.person_to_person[i]);
-      // }
-    }
-     });
-
-    
-  }
   void initState() {
-    //get all chats from database
-    // contactsData =  _getContacts();
-
-getChatsFromDb();
 
     super.initState();
 
   
 
-    //sort the list by creation time
-
-    mychattData_.sort((a, b) {
-      // return a['name'].toLowerCase().compareTo(b['name'].toLowerCase());
-      return a.createTime.compareTo(b.createTime);
-    });
-
-    //reverse the sort list
-    //list builder starts from the bottom
-    //reverse the content s as to match the reverssed lis ( - - - = +)
-    Iterable inReverse = mychattData_.reversed;
-
-    mychattData = inReverse.toList();
-
-    print("my chat ${mychattData.length}");
-
+   
 //wait for message
     StreamBuilder(
       stream: widget.channel.stream,
@@ -350,15 +316,16 @@ getChatsFromDb();
 
     _myMessage(newChatItem, context);
 
-    setState(() {
-      mychattData.insert(0, newChatItem);
-    });
-    // msg.animationController.forward();
-    Database con = await AllyNativeDb().db();
 
-    //insert into database message item
+     //insert into database message item
     //(ChatP2PModel achat, Database db)
+    Database con = await AllyDatabase().db;
     P2PDB().addp2pChat(newChatItem, con);
+
+//setstate
+      setState(() {
+      //mychattData.insert(0, newChatItem);
+    });
   }
 
   void _submitMsg(String txt) async {
@@ -391,18 +358,23 @@ getChatsFromDb();
 
   //insert to array
     _myMessage(newChatItem, context);
-    setState(() {
-      mychattData.insert(0, newChatItem);
-    });
+
+  
     // msg.animationController.forward();
 
     //send to server
     
-    Database con = await AllyNativeDb().db();
 
+  
     //insert into database message item
     //(ChatP2PModel achat, Database db)
+    Database con = await AllyDatabase().db;
     P2PDB().addp2pChat(newChatItem, con);
+
+//setstate
+      setState(() {
+      //mychattData.insert(0, newChatItem);
+    });
   }
 
   @override
@@ -953,6 +925,73 @@ getChatsFromDb();
     }
   }
 
+Future<List<ChatP2PModel>> getUserChatsFromDatabase() async{
+  
+
+ Database conn = await AllyDatabase().db;
+     Future<List<ChatP2PModel>> mychattData_ =  P2PDB().getp2pChats(conn, widget.senderPhoneNumber);
+
+
+return mychattData_;
+}
+
+Widget bodyContainerContents(List<ChatP2PModel> mychattData){
+  return  new Column(children: <Widget>[
+            new Flexible(
+                child: ListView.builder(
+              itemCount: mychattData.length,
+              itemBuilder: (BuildContext ctxt, int index) {
+                //BuildContext ctxt, int index,ChatModel  mychattData
+                return _messageItem(ctxt, index, mychattData[index]);
+              },
+              reverse: true,
+              padding: new EdgeInsets.all(6.0),
+            )),
+            new Divider(height: 1.0),
+            new Container(
+              child: _buildComposer(context),
+              decoration: new BoxDecoration(color: Theme.of(context).cardColor),
+            ),
+          ]);
+}
+
+List<ChatP2PModel> sortSnapShortData(List<ChatP2PModel> myChattData ){
+  //sort the list by creation time
+
+    myChattData.sort((a, b) {
+      // return a['name'].toLowerCase().compareTo(b['name'].toLowerCase());
+      return a.createTime.compareTo(b.createTime);
+    });
+
+    //reverse the sort list
+    //list builder starts from the bottom
+    //reverse the content s as to match the reverssed lis ( - - - = +)
+    Iterable inReverse = myChattData.reversed;
+
+ List<ChatP2PModel>    mychattData = inReverse.toList();
+
+    print("my chat ${mychattData.length}");
+
+return mychattData;
+
+}
+
+Widget _bodyContainer(){
+   return new FutureBuilder(
+        future: getUserChatsFromDatabase(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.hasData) {
+            //sor the list and pass it into bodyContainerContents
+            return bodyContainerContents(sortSnapShortData(snapshot.data));
+          } else if (snapshot.error) {
+            return Center(
+              child: Text("No Chats"),
+            );
+          } else {
+            return CircularProgressIndicator();
+          }
+        });
+}
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -1000,23 +1039,7 @@ getChatsFromDb();
               _menuVert(context),
             ],
           ),
-          body: new Column(children: <Widget>[
-            new Flexible(
-                child: ListView.builder(
-              itemCount: mychattData.length,
-              itemBuilder: (BuildContext ctxt, int index) {
-                //BuildContext ctxt, int index,ChatModel  mychattData
-                return _messageItem(ctxt, index, mychattData[index]);
-              },
-              reverse: true,
-              padding: new EdgeInsets.all(6.0),
-            )),
-            new Divider(height: 1.0),
-            new Container(
-              child: _buildComposer(context),
-              decoration: new BoxDecoration(color: Theme.of(context).cardColor),
-            ),
-          ]),
+          body: _bodyContainer()
         ));
   }
 }
@@ -1045,92 +1068,6 @@ class PopMenuDetails {
   ];
 }
 
-class ChatHistoryDataSearch extends SearchDelegate<String> {
-  final cities = [
-    "Nairobi",
-    "Nakuru",
-    "Thika",
-    "Kiambu",
-    "Nyeri",
-    "Mombasa",
-    "kwale",
-    "Nyali",
-    "Mtwapa",
-    "Githurai"
-  ];
-  final recentCity = ["Mombasa", "kwale", "Nyali", "Mtwapa", "Githurai"];
-
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    // actions for app bar
-    return [
-      IconButton(
-        icon: Icon(Icons.clear),
-        onPressed: () {
-          query = "";
-        },
-      )
-    ];
-  }
-
-  @override
-  Widget buildLeading(BuildContext context) {
-    // leading icon
-    return IconButton(
-      icon: AnimatedIcon(
-        icon: AnimatedIcons.menu_arrow,
-        progress: transitionAnimation,
-      ),
-      onPressed: () {
-        close(context, null);
-      },
-    );
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    // show results bass on search
-    return Text("results");
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    // show when someone searches
-    //["nairobi","nakuru","kiambu","Eldorete"]
-
-    final suggestionList = this.query != null
-        ? //test if not null
-        this.query.isEmpty || this.query == null
-            ? //if not null check if empty
-            recentCity
-            : //if empty return recent
-            cities // cities.where((p){p.contains(this.query); }).toList()  //if not null or empty return item that contains
-        : recentCity; //if null return rescent
-
-    print(suggestionList);
-
-    return ListView.builder(
-      itemBuilder: (context, index) => ListTile(
-            onTap: () {
-              showResults(context);
-            },
-            leading: Icon(Icons.location_city),
-            title: RichText(
-              text: TextSpan(
-                  text: suggestionList[index].substring(0, query.length),
-                  style: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.bold),
-                  children: [
-                    TextSpan(
-                        text: suggestionList[index].substring(query.length),
-                        style: TextStyle(color: Colors.grey))
-                  ]),
-            ),
-          ),
-      itemCount: suggestionList.length,
-    );
-  }
-}
 
 class MyMessage extends StatelessWidget {
   MyMessage({this.chat, this.animationController, context});

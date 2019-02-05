@@ -11,7 +11,8 @@ import 'package:ally_chat/pages/bottom_modal/main_bottom_modal.dart';
 import 'package:connectivity/connectivity.dart';
 import 'dart:async';
 import 'package:flutter/services.dart';
-import 'package:sqflite/sqflite.dart'; 
+import 'package:simple_permissions/simple_permissions.dart';
+import 'package:sqflite/sqflite.dart';
 
 class ChatHistory extends StatefulWidget {
   static String tag = 'chat-history-page';
@@ -20,24 +21,65 @@ class ChatHistory extends StatefulWidget {
 
 class _ChatHistoryState extends State<ChatHistory>
     with SingleTickerProviderStateMixin {
-
-      String _connectionStatus = 'Unknown';
+  String _connectionStatus = 'Unknown';
   final Connectivity _connectivity = Connectivity();
   StreamSubscription<ConnectivityResult> _connectivitySubscription;
-List<Contact> userContacts = [];
+  List<Contact> userContacts = [];
 
-  List<ChatHistoryModel> chatData;
+  static const platform = const MethodChannel('com.araizen/modules/utils');
 
-void getAllContacts() async{
-  Database conn = await AllyDatabase().db;
-userContacts = await ContactDB().getAllContact(conn);
-print("user contacts lenth ${userContacts.length}");
-}
+  Future<Map<dynamic, dynamic>> _getContacts() async {
+    Map<dynamic, dynamic> _conts = {};
 
+    try {
+      _conts =
+          await platform.invokeMethod('getContacts') as Map<dynamic, dynamic>;
+    } on PlatformException catch (e) {
+      print("\n\n Failed to get ciontacts : '${e.message}'. \n\n");
+    }
 
-@override
+    return _conts;
+  }
+
+  getAllContacts() async {
+    List<Contact> contacts = await getAllContactsFromDb();
+
+    if (contacts == null || contacts.length <= 0) {
+      Map<dynamic, dynamic> myContacts = await _getContacts();
+
+      for (var i = 0; i < myContacts.length; i++) {
+        String name = myContacts.keys.elementAt(i);
+        String number = myContacts[name];
+
+        userContacts.add(Contact(name: name, phoneNumber: number));
+      }
+    } else {
+      userContacts = contacts;
+    }
+  }
+
+  Future<List<Contact>> getAllContactsFromDb() async {
+    Database conn = await AllyDatabase().db;
+    var userContacts = await ContactDB().getAllContact(conn);
+    print("user contacts lenth ${userContacts.length}");
+    return userContacts;
+  }
+
+  requestPermission(Permission permission) async {
+    final res = await SimplePermissions.requestPermission(permission);
+    print(" \n\n\n --------->permission request result is " + res.toString());
+  }
+
+  checkPermission(Permission permission) async {
+    bool res = await SimplePermissions.checkPermission(permission);
+    print("\n\n\n --------->permission is " + res.toString());
+    if (res == false) {
+      requestPermission(permission);
+    }
+  }
+
+  @override
   void initState() {
-
     getAllContacts();
 
     super.initState();
@@ -49,7 +91,17 @@ print("user contacts lenth ${userContacts.length}");
       setState(() => _connectionStatus = result.toString());
     });
 
+//camera permsion
+    checkPermission(Permission.Camera);
 
+//record audio
+    checkPermission(Permission.RecordAudio);
+
+    // photo library
+    checkPermission(Permission.PhotoLibrary);
+
+    // vibrate message
+    checkPermission(Permission.Vibrate);
   }
 
   @override
@@ -63,12 +115,14 @@ print("user contacts lenth ${userContacts.length}");
         leading: Stack(
           children: <Widget>[
             Container(
-             margin: EdgeInsets.only(left: 3.0,top: 4.0),
-             height: 40.0,
-             width: 40.0,
-             child: IconButton(
-                
-                icon: Icon(Icons.menu,size: 28.0,),
+              margin: EdgeInsets.only(left: 3.0, top: 4.0),
+              height: 40.0,
+              width: 40.0,
+              child: IconButton(
+                icon: Icon(
+                  Icons.menu,
+                  size: 28.0,
+                ),
                 onPressed: () {
                   //  MainBottomModal(context: context).MainBottomModalDialog();
                   MainBottomModal(context: context).MainBottomModalDialog();
@@ -108,15 +162,13 @@ print("user contacts lenth ${userContacts.length}");
         ]);
   }
 
-  String getUserName(String phoneNumber){
-
-for (var i = 0; i < userContacts.length; i++) {
-  if(userContacts[i].phoneNumber ==  phoneNumber){
-   
-    return userContacts[i].name;
-  }
-}
-return phoneNumber;
+  String getUserName(String phoneNumber) {
+    for (var i = 0; i < userContacts.length; i++) {
+      if (userContacts[i].phoneNumber == phoneNumber) {
+        return userContacts[i].name;
+      }
+    }
+    return phoneNumber;
   }
 
   Widget _personTile(ChatHistoryModel personChatHistory) {
@@ -147,11 +199,9 @@ return phoneNumber;
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           new Text(
-        
-
 
               //show name from local name based on sender id=Userid or number
-            getUserName(personChatHistory.senderPhoneNumber ) ,
+              getUserName(personChatHistory.senderPhoneNumber),
               // chatHistory.groupName,
               style: new TextStyle(fontWeight: FontWeight.bold)),
           new Text(personChatHistory.numberMessage,
@@ -218,9 +268,7 @@ return phoneNumber;
     }
   }
 
-
-
-   // Platform messages are asynchronous, so we initialize in an async method.
+  // Platform messages are asynchronous, so we initialize in an async method.
   Future<Null> initConnectivity() async {
     String connectionStatus;
     // Platform messages may fail, so we use a try/catch PlatformException.
@@ -243,30 +291,6 @@ return phoneNumber;
     });
   }
 
-  Widget _messages() {
-    if (chatData != null && chatData.length > 0) {
-      return Container(
-        child: new ListView.builder(
-          itemCount: chatData.length,
-          itemBuilder: (context, i) => new Column(
-                children: <Widget>[
-                  _chatTile(chatData[i]),
-                  new Divider(
-                    height: 5.0,
-                  ),
-                ],
-              ),
-        ),
-      );
-    } else {
-      return Center(
-        child: Container(
-          child: Text("No recent chats"),
-        ),
-      );
-    }
-  }
-
   var divide = Container(
     margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
     child: new Divider(
@@ -274,11 +298,73 @@ return phoneNumber;
     ),
   );
 
+  bodyContainerContents(List<ChatHistoryModel> myChatHistory) {
+    // Container(color: Colors.white, child: _messages());
+    return new Column(children: <Widget>[
+      new Flexible(
+          child: ListView.builder(
+        itemCount: myChatHistory.length,
+        itemBuilder: (BuildContext ctxt, int index) {
+          //BuildContext ctxt, int index,ChatModel  myChatHistory
+          // return _messages(ctxt, index, myChatHistory[index]);
+          _chatTile(myChatHistory[index]);
+          // new Divider(
+          //   height: 5.0,
+          // ),
+        },
+        reverse: true,
+        padding: new EdgeInsets.all(6.0),
+      )),
+      new Divider(height: 1.0),
+    ]);
+  }
+
+  Future<List<ChatHistoryModel>> getChatsHistoryFromDatabase() {}
+  List<ChatHistoryModel> sortSnapShortData(
+      List<ChatHistoryModel> myChatHistory) {
+    //sort the list by creation time
+
+    myChatHistory.sort((a, b) {
+      // return a['name'].toLowerCase().compareTo(b['name'].toLowerCase());
+      return a.createTime.compareTo(b.createTime);
+    });
+
+    //reverse the sort list
+    //list builder starts from the bottom
+    //reverse the content s as to match the reverssed lis ( - - - = +)
+    Iterable inReverse = myChatHistory.reversed;
+
+    List<ChatHistoryModel> _myChatHistory = inReverse.toList();
+
+    print("my chat ${_myChatHistory.length}");
+
+    return _myChatHistory;
+  }
+
+  Widget _bodyContainer() {
+    return new FutureBuilder(
+        future: getChatsHistoryFromDatabase(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.hasData) {
+            //sor the list and pass it into bodyContainerContents
+            return bodyContainerContents(sortSnapShortData(snapshot.data));
+          } else if (snapshot.error) {
+            return Center(
+              child: Container(
+                child: Text("No recent chats"),
+              ),
+            );
+          } else {
+            return CircularProgressIndicator();
+          }
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: appBar(context),
-      body: Container(color: Colors.white, child: _messages()),
+      body: _bodyContainer(),
       floatingActionButton: FloatingActionButton(
         tooltip: "messages",
         backgroundColor: Colors.blue,

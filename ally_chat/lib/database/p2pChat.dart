@@ -11,7 +11,7 @@ class P2PDB {
  */
   Future<List<ChatP2PModel>> getp2pChats(Database db, String userId) async {
     String getContactsQuery =
-        "SELECT * FROM chat_p2p_table "; //WHERE  RecepientId=$userId or SenderId=$userId ";
+        "SELECT * FROM chat_p2p_table  WHERE  RecepientId=$userId or SenderId=$userId ";
 
     List<Map> dbList = await db.rawQuery(getContactsQuery);
     List<ChatP2PModel> chats = new List();

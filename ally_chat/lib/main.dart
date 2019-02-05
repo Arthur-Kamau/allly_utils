@@ -1,4 +1,5 @@
-import 'package:ally_chat/database/auth_data_db.dart';
+import 'package:ally_chat/database/authDataDB.dart';
+import 'package:ally_chat/model/authData.dart';
 import 'package:ally_chat/pages/attach_items/attach_items.dart';
 import 'package:ally_chat/pages/contacts/contacts_select_many.dart';
 import 'package:ally_chat/pages/group/group_profile.dart';
@@ -13,7 +14,11 @@ import 'package:ally_chat/pages/person/person_profile.dart';
 import 'package:ally_chat/pages/profile/profile.dart';
 import 'package:ally_chat/pages/settings/account/account.dart';
 import 'package:ally_chat/pages/settings/account/change_email.dart';
+import 'package:ally_chat/pages/settings/account/change_location.dart';
+import 'package:ally_chat/pages/settings/account/change_name.dart';
 import 'package:ally_chat/pages/settings/account/change_number.dart';
+import 'package:ally_chat/pages/settings/account/change_status.dart';
+import 'package:ally_chat/pages/settings/account/change_what_i_do.dart';
 import 'package:ally_chat/pages/settings/app_information/app_information.dart';
 import 'package:ally_chat/pages/settings/app_information/app_information_deails.dart';
 import 'package:ally_chat/pages/settings/app_information/app_information_developers.dart';
@@ -56,8 +61,8 @@ class AllyHomePage extends StatelessWidget {
     //ChatHistory
     ChatHistory.tag: (context) => ChatHistory(),
 
-    ContactsSelectMany.tag: (context) => ContactsSelectMany(),
-    ContactsSelectOne.tag: (context) => ContactsSelectOne(),
+    ContactSelectMany.tag: (context) => ContactSelectMany(),
+    ContactSelectOne.tag: (context) => ContactSelectOne(),
 
     
     GroupsDetails.tag: (context) => GroupsDetails(),
@@ -78,11 +83,6 @@ class AllyHomePage extends StatelessWidget {
     AccountChangeWhatIDo.tag: (context) => AccountChangeWhatIDo(),
     AccountChangeLocation.tag: (context) => AccountChangeLocation(),
 
-
-
-
-
-
     AppInformtaionDetails.tag: (context) => AppInformtaionDetails(),
     AppInformationDevelopers.tag: (context) => AppInformationDevelopers(),
     AppInformationPolicy.tag: (context) => AppInformationPolicy(),
@@ -98,7 +98,7 @@ class AllyHomePage extends StatelessWidget {
   Future<AuthDetails> getAppToken() {
     AppId().stateAppId();
 
-    Future<AuthDetails> auth = AuthData().getAuthDetails();
+    Future<AuthDetails> auth = AuthDataDB().getAuthDetails();
     return auth;
   }
 

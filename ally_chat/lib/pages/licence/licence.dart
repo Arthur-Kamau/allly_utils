@@ -1,3 +1,4 @@
+import 'package:simple_permissions/simple_permissions.dart';
 import 'package:flutter/material.dart';
 
 import 'package:ally_chat/pages/slides/homePage.dart';
@@ -14,6 +15,7 @@ class AllyLicencePage extends StatefulWidget {
 
 class _LicencePageState extends State<AllyLicencePage> {
   final _formKey = GlobalKey<FormState>();
+Permission permission;
 
   Padding buildTitle() {
     return Padding(
@@ -42,6 +44,8 @@ class _LicencePageState extends State<AllyLicencePage> {
     );
   }
 
+
+
   Align acceptLicenceAndContinue(BuildContext context) {
     return Align(
       alignment: Alignment.bottomCenter,
@@ -49,7 +53,12 @@ class _LicencePageState extends State<AllyLicencePage> {
         height: 50.0,
         width: 270.0,
         child: FlatButton(
-          onPressed: () {
+          onPressed: () async {
+
+
+
+
+
             if (_formKey.currentState.validate()) {
               //TODO Check values and navigate to new page
               Navigator.of(context).pushNamed(IntroSliderHomePage.tag);

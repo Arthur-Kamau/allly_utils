@@ -1,9 +1,9 @@
 import 'package:ally_chat/core/contact.dart';
 import 'package:ally_chat/database/blocked_contacts.dart';
 import 'package:ally_chat/database/database.dart';
-import 'package:ally_chat/database/db.dart';
 import 'package:ally_chat/pages/contacts/contacts_select_many.dart';
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
 
 class BlockedUsersList extends StatefulWidget {
   static String tag = 'user-settings-blockedusers-page';
@@ -16,8 +16,8 @@ class _BlockedUsersListState extends State<BlockedUsersList> {
   // List<String> numbersSelectedFromDatabase = [];
 
   Future<List<Contact>> getBlockedContactFromDatabase() async {
-    var conn = await AllyDatabase().db;
-    var contacts =  BlockedContactDB().getAllContactsBlocked(conn);
+    Database conn = await AllyDatabase().db;
+    Future<List<Contact>> contacts =  BlockedContactDB().getAllContactsBlocked(conn);
 
     return contacts;
   }

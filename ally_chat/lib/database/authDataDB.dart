@@ -1,11 +1,12 @@
 // import "dart:async" ;
-// import "dart:io" as io;
+import "dart:io" as io;
+import 'package:ally_chat/model/authData.dart';
 import "package:meta/meta.dart";
 import "package:path/path.dart";
 import "package:sqflite/sqflite.dart";
 import "package:path_provider/path_provider.dart";
 
-class AuthData {
+class AuthDataDB {
   static Database _db;
 
   Future<Database> get db async {
@@ -40,9 +41,9 @@ class AuthData {
       List<AuthDetails> auth_details = new List();
       for (int i = 0; i < list.length; i++) {
         auth_details.add(AuthDetails(
-           name: int.parse(list[i]["name"]),
-          phoneNumber: DateTime.parse(list[i]["phoneNumber"]),
-          countryCode : DateTime.parse(list[i]["countryCode"]),
+           name: list[i]["name"],
+          phoneNumber: list[i]["phoneNumber"],
+          countryCode : list[i]["countryCode"],
           authTime: DateTime.parse(list[i]["authTime"]),
           authtoken: list[i]["authToken"],
           deviceId: list[i]["deviceId"],
@@ -62,19 +63,7 @@ class AuthData {
   void saveAuthDetails(AuthDetails userDetails) async {
     var dbClient = await db;
     await dbClient.transaction((txn) async {
-      return await txn.rawInsert(
-          '''
-          INSERT INTO AuthDetails(name,phoneNumber, authToken, authTime, deviceId ) VALUES(
-            
-            '${ userDetails.name }',
-            '${ userDetails.phoneNumber ) }',
-           ${ userDetails.countryCode ) }',
-              '${userDetails.authtoken }',
-               '${ userDetails.authTime.toString() }',
-               '${ userDetails.deviceId }'
-               
-              )
-             ''' 
+      return await txn.rawInsert("INSERT INTO AuthDetails(name,phoneNumber, authToken, authTime, deviceId ) VALUES('${ userDetails.name }','${userDetails.phoneNumber}','${ userDetails.countryCode  }','${userDetails.authtoken }','${ userDetails.authTime.toString() }', '${ userDetails.deviceId }') " 
               );
     });
   }

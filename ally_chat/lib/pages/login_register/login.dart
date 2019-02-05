@@ -3,6 +3,7 @@ import 'package:ally_chat/sharedPreferences/phoneNumber.dart';
 import 'package:flutter/material.dart';
 import 'package:ally_chat/pages/login_register/register.dart';
 import 'package:ally_chat/pages/login_register/code_confirmation.dart';
+import 'package:simple_permissions/simple_permissions.dart';
 
 class LogInPage extends StatefulWidget {
   static String tag = 'login-page';
@@ -24,10 +25,39 @@ class _LoginPageState extends State<LogInPage> {
   TextEditingController phoneNumberController = new TextEditingController();
   TextEditingController countryCodeController;
 
+
+  requestPermission(Permission permission) async {
+    final res = await SimplePermissions.requestPermission(permission);
+    print(" \n\n\n --------->permission request result is " + res.toString());
+  }
+
+  checkPermission(Permission permission) async {
+    bool res = await SimplePermissions.checkPermission(permission);
+    print("\n\n\n --------->permission is " + res.toString());
+    if(res==false){
+      requestPermission(permission);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     countryCodeController = new TextEditingController(text: "+254");
+
+    //read and write permisions to external storage
+//read sms permission
+//contact permission
+checkPermission(Permission.ReadContacts);
+
+checkPermission(Permission.ReadSms);
+
+checkPermission(Permission.AccessFineLocation);
+
+// Read External Storage (Android)
+ checkPermission(Permission.ReadExternalStorage);
+
+  // Write External Storage (Android)
+ checkPermission(Permission.WriteExternalStorage);
   }
 
   Padding errorText() {

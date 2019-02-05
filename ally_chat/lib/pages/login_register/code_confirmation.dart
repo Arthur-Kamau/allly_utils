@@ -1,3 +1,4 @@
+import 'package:ally_chat/database/authDataDB.dart';
 import 'package:ally_chat/model/authData.dart';
 import 'package:ally_chat/model/user_code_confirmation.dart';
 import 'package:ally_chat/pages/login_register/register.dart';
@@ -101,7 +102,8 @@ String phoneNumberstr = await UserPhoneNumberAndCountryCodePreferenceAsset().get
                     authtoken: getAppToken,
                     deviceId: appid);
 
-                   AuthData().saveAuthDetails(auth);
+
+                   AuthDataDB().saveAuthDetails(auth);
               });
 
               //then naivigate to homepage

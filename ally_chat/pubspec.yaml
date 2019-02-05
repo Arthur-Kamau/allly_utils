@@ -30,9 +30,10 @@ dependencies:
   #url launcher
   url_launcher: ^4.0.1
   connectivity: ^0.3.2
-  badge: any
+  #badge: any
   share: ^0.5.3
   geolocator: ^2.1.1
+  simple_permissions: ^0.1.9
 
 dev_dependencies:
   flutter_test:
